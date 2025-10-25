@@ -1,0 +1,1286 @@
+
+
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import Navbar from "./Navbar";
+
+function About() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  return (
+    <div className="font-['Inter'] text-gray-800 leading-relaxed">
+      {/* Navigation */}
+      <Navbar isScrolled={isScrolled} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 flex flex-col md:flex-row items-center gap-8">
+        <div className="flex-1">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            Trusted by 10,000+ Businesses Worldwide
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            MDK Agency is the leading AI-powered digital solutions provider, transforming businesses through innovative technology and human-centered design. Join thousands of satisfied clients who trust us with their digital transformation.
+          </p>
+          <div className="flex flex-wrap gap-8 my-8">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-indigo-600 mb-2">10,000+</div>
+              <div className="text-sm text-gray-600 font-medium">Happy Clients</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-indigo-600 mb-2">98%</div>
+              <div className="text-sm text-gray-600 font-medium">Success Rate</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-indigo-600 mb-2">24/7</div>
+              <div className="text-sm text-gray-600 font-medium">Support</div>
+            </div>
+          </div>
+          <button className="bg-indigo-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-indigo-700 transition-colors">
+            Join Our Success Stories
+          </button>
+        </div>
+        <div className="flex-1">
+          <img
+            src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            alt="Innovative workspace with technology"
+            className="w-full rounded-xl shadow-xl"
+          />
+        </div>
+      </section>
+
+      {/* Trust Indicators Section */}
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
+            Why 10,000+ Businesses Trust MDK Agency
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-xl text-center shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="text-4xl mb-4">🏆</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Industry Recognition</h3>
+              <p className="text-gray-600">
+                Winner of "Best AI Agency 2023" and "Digital Innovation Award" from leading industry publications.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl text-center shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="text-4xl mb-4">🔒</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Enterprise Security</h3>
+              <p className="text-gray-600">
+                SOC 2 Type II certified with ISO 27001 compliance, ensuring your data is always protected.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl text-center shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="text-4xl mb-4">⭐</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">5-Star Reviews</h3>
+              <p className="text-gray-600">
+                4.9/5 average rating from 2,500+ verified client reviews across all major platforms.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl text-center shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="text-4xl mb-4">🤝</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Fortune 500 Clients</h3>
+              <p className="text-gray-600">
+                Trusted by leading companies including Microsoft, Google, Amazon, and 50+ Fortune 500 companies.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">
+            Why Choose MDK Agency?
+          </h2>
+          <p className="text-xl text-center text-gray-600 mb-12">
+            Discover what makes us the preferred choice for digital transformation
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-indigo-600 hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="text-4xl mb-4">🤖</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">AI-Powered Innovation</h3>
+              <p className="text-gray-600">
+                We leverage cutting-edge artificial intelligence to deliver solutions that are 10x faster and more accurate than traditional methods.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-indigo-600 hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="text-4xl mb-4">⚡</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Lightning-Fast Delivery</h3>
+              <p className="text-gray-600">
+                Get your projects delivered in record time. Our streamlined processes enable us to deliver results 3x faster than industry standards.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-indigo-600 hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="text-4xl mb-4">💰</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Cost-Effective Solutions</h3>
+              <p className="text-gray-600">
+                Save up to 60% on your digital projects with our efficient AI-powered processes while maintaining premium quality standards.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-indigo-600 hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="text-4xl mb-4">🎯</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Proven Results</h3>
+              <p className="text-gray-600">
+                Our clients see an average 300% increase in ROI within the first 6 months. We deliver measurable business growth.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-indigo-600 hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="text-4xl mb-4">🌍</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Global Expertise</h3>
+              <p className="text-gray-600">
+                With teams across 15 countries and 24/7 support, we provide seamless service regardless of your timezone.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-indigo-600 hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="text-4xl mb-4">🔄</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Continuous Innovation</h3>
+              <p className="text-gray-600">
+                We invest 20% of our revenue in R&D, ensuring our clients always have access to the latest technologies.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mission Statement */}
+      <section id="mission" className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
+            Our Mission & Vision
+          </h2>
+          <div className="flex flex-col md:flex-row gap-12">
+            <div className="flex-1 text-lg">
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">Our Mission</h3>
+              <p className="text-gray-600 mb-6">
+                At MDK Agency, we're revolutionizing how businesses approach digital transformation by combining artificial intelligence with human creativity. Our mission is to democratize access to cutting-edge technology, making it available to businesses of all sizes.
+              </p>
+              <p className="text-gray-600 mb-8">
+                We believe that every business deserves access to world-class digital solutions, regardless of their size or budget. That's why we've built our AI-powered platform to deliver enterprise-level results at startup-friendly prices.
+              </p>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">Our Vision</h3>
+              <p className="text-gray-600">
+                To become the world's leading AI-powered digital agency, transforming 1 million businesses by 2030. We envision a future where technology seamlessly integrates with human creativity to solve the world's most complex business challenges.
+              </p>
+            </div>
+            <div className="flex-1">
+              <img
+                src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                alt="Abstract representation of innovation"
+                className="w-full rounded-xl shadow-md"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Client Success Stories */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">
+            Client Success Stories
+          </h2>
+          <p className="text-xl text-center text-gray-600 mb-12">
+            Real results from real clients who trust MDK Agency
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="flex items-center mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" 
+                  alt="Client" 
+                  className="w-14 h-14 rounded-full mr-4 object-cover" 
+                />
+                <div>
+                  <h4 className="font-semibold text-gray-900">Sarah Johnson</h4>
+                  <p className="text-gray-600 text-sm">CEO, TechStart Inc.</p>
+                </div>
+              </div>
+              <div className="text-gray-600 italic mb-6">
+                "MDK Agency transformed our digital presence completely. Our website traffic increased by 400% and our conversion rate improved by 250% in just 3 months. The AI-powered approach was game-changing."
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <span className="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-medium">+400% Traffic</span>
+                <span className="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-medium">+250% Conversions</span>
+              </div>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="flex items-center mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" 
+                  alt="Client" 
+                  className="w-14 h-14 rounded-full mr-4 object-cover" 
+                />
+                <div>
+                  <h4 className="font-semibold text-gray-900">Michael Chen</h4>
+                  <p className="text-gray-600 text-sm">Marketing Director, GlobalCorp</p>
+                </div>
+              </div>
+              <div className="text-gray-600 italic mb-6">
+                "The AI-generated content strategy delivered results we never thought possible. Our engagement rates skyrocketed and we saved 70% on content creation costs while improving quality."
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <span className="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-medium">+300% Engagement</span>
+                <span className="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-medium">70% Cost Savings</span>
+              </div>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="flex items-center mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" 
+                  alt="Client" 
+                  className="w-14 h-14 rounded-full mr-4 object-cover" 
+                />
+                <div>
+                  <h4 className="font-semibold text-gray-900">Emily Rodriguez</h4>
+                  <p className="text-gray-600 text-sm">Founder, CreativeStudio</p>
+                </div>
+              </div>
+              <div className="text-gray-600 italic mb-6">
+                "The 24-hour CV service was a lifesaver! I got a professional, ATS-optimized resume that helped me land my dream job. The quality exceeded my expectations."
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <span className="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-medium">24h Delivery</span>
+                <span className="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-medium">Dream Job Landed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Team Section */}
+      <section id="team" className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">
+            Meet Our Expert Team
+          </h2>
+          <p className="text-xl text-center text-gray-600 mb-12">
+            150+ world-class professionals dedicated to your success
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-xl text-center shadow-sm hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="w-36 h-36 rounded-full overflow-hidden mx-auto mb-6">
+                <img
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                  alt="Alex Johnson - CEO"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Alex Johnson</h3>
+              <p className="text-indigo-600 font-semibold mb-4">CEO & Founder</p>
+              <p className="text-gray-600 mb-6">
+                Former Google AI researcher with 15+ years in machine learning. Led digital transformation for 500+ companies.
+              </p>
+              <div className="flex justify-center gap-2">
+                <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Stanford PhD</span>
+                <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Ex-Google</span>
+              </div>
+            </div>
+            <div className="bg-white p-6 rounded-xl text-center shadow-sm hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="w-36 h-36 rounded-full overflow-hidden mx-auto mb-6">
+                <img
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                  alt="Maria Chen - CTO"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Maria Chen</h3>
+              <p className="text-indigo-600 font-semibold mb-4">Chief Technology Officer</p>
+              <p className="text-gray-600 mb-6">
+                AI specialist with 20+ years experience. Built AI systems serving 10M+ users. MIT graduate with 50+ patents.
+              </p>
+              <div className="flex justify-center gap-2">
+                <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">MIT Graduate</span>
+                <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">50+ Patents</span>
+              </div>
+            </div>
+            <div className="bg-white p-6 rounded-xl text-center shadow-sm hover:-translate-y-1 hover:shadow-md transition-transform duration-300">
+              <div className="w-36 h-36 rounded-full overflow-hidden mx-auto mb-6">
+                <img
+                  src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                  alt="David Kim - Lead Designer"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">David Kim</h3>
+              <p className="text-indigo-600 font-semibold mb-4">Lead Designer</p>
+              <p className="text-gray-600 mb-6">
+                Creative director with 12+ years experience. Designed award-winning interfaces for Apple, Tesla, and Netflix.
+              </p>
+              <div className="flex justify-center gap-2">
+                <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Apple Designer</span>
+                <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Award Winner</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Values Section */}
+      <section id="values" className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
+            Our Core Values
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-xl text-center shadow-sm hover:-translate-y-1 transition-transform duration-300">
+              <div className="text-4xl mb-4">🚀</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Innovation First</h3>
+              <p className="text-gray-600">
+                We constantly push boundaries and embrace cutting-edge technology to deliver solutions that exceed expectations.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl text-center shadow-sm hover:-translate-y-1 transition-transform duration-300">
+              <div className="text-4xl mb-4">🤝</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Client Partnership</h3>
+              <p className="text-gray-600">
+                We don't just work for you; we work with you. Every project is a partnership built on trust and shared success.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl text-center shadow-sm hover:-translate-y-1 transition-transform duration-300">
+              <div className="text-4xl mb-4">⚡</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Speed & Quality</h3>
+              <p className="text-gray-600">
+                We believe speed and quality aren't mutually exclusive. Our AI-powered processes deliver exceptional results fast.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl text-center shadow-sm hover:-translate-y-1 transition-transform duration-300">
+              <div className="text-4xl mb-4">🌍</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Global Impact</h3>
+              <p className="text-gray-600">
+                We're committed to making technology accessible worldwide, helping businesses compete in the global digital economy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Ready to Join 10,000+ Successful Businesses?
+          </h2>
+          <p className="text-xl mb-8 opacity-90">
+            Let's transform your digital presence together. Get started with a free consultation and see why businesses worldwide trust MDK Agency.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link to="/contact" className="bg-white text-indigo-600 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition-colors border-2 border-white">
+              Start Your Project
+            </Link>
+            <Link to="/services" className="bg-transparent text-white px-8 py-3 rounded-md font-semibold hover:bg-white/10 transition-colors border-2 border-white">
+              View Our Services
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p>© 2024 MDK Agency. Trusted by 10,000+ businesses worldwide. Transforming digital futures, one project at a time.</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+export default About;
+
+
+
+
+
+import React, { useState, useEffect } from 'react';
+
+// Eye Icon Component
+const EyeIcon = ({ visible }) => (
+  visible ? (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4-9-7s4-7 9-7a9.964 9.964 0 014.031.84M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3l18 18" />
+    </svg>
+  ) : (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c5 0 9 4 9 7 0 1.18-.293 2.29-.805 3.286M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+  )
+);
+
+// Message Component
+const Message = ({ message, type, onClose }) => (
+  <div className={`p-4 mb-4 rounded-lg shadow-md flex items-center justify-between animate-slide-in ${
+    type === 'error' ? 'bg-red-100 text-red-700 border border-red-300' :
+    type === 'success' ? 'bg-green-100 text-green-700 border border-green-300' :
+    'bg-blue-100 text-blue-700 border border-blue-300'
+  }`}>
+    <div className="flex items-center">
+      <span className={`mr-3 ${
+        type === 'error' ? 'text-red-500' :
+        type === 'success' ? 'text-green-500' : 'text-blue-500'
+      }`}>
+        {type === 'error' ? '⚠️' : type === 'success' ? '✅' : 'ℹ️'}
+      </span>
+      <span className="text-sm font-medium">{message}</span>
+    </div>
+    <button
+      onClick={onClose}
+      className="ml-4 text-gray-500 hover:text-gray-700 transition-colors duration-200"
+      aria-label="Close message"
+    >
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+);
+
+// Modal Component
+const Modal = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md animate-scale-in">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 transition-colors duration-200 p-1 rounded-full hover:bg-gray-100"
+            aria-label="Close modal"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+// Password Strength Indicator
+const PasswordStrength = ({ strength }) => {
+  const strengthLabels = ['Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'];
+  const strengthColors = ['bg-red-500', 'bg-red-500', 'bg-yellow-500', 'bg-green-500', 'bg-green-600'];
+
+  return (
+    <div className="mt-2">
+      <div className="flex items-center mb-1">
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <div
+            className={`h-2 rounded-full transition-all duration-300 ${strengthColors[strength]}`}
+            style={{ width: `${(strength / 4) * 100}%` }}
+          ></div>
+        </div>
+      </div>
+      <p className="text-xs text-gray-600 font-medium">
+        {strengthLabels[strength]}
+      </p>
+    </div>
+  );
+};
+
+const AuthForm = () => {
+  // State management
+  const [currentUser, setCurrentUser] = useState(null);
+  const [activeForm, setActiveForm] = useState('login');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showVerification, setShowVerification] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [pendingVerification, setPendingVerification] = useState(null);
+  
+  // Form data states
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
+  const [signupData, setSignupData] = useState({
+    name: '', email: '', password: '', confirmPassword: ''
+  });
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  
+  // Captcha state
+  const [captcha, setCaptcha] = useState({ question: '', answer: 0 });
+  const [captchaInput, setCaptchaInput] = useState('');
+  const [signupCaptchaInput, setSignupCaptchaInput] = useState('');
+  
+  // Password strength
+  const [passwordStrength, setPasswordStrength] = useState(0);
+  
+  // Password visibility
+  const [passwordVisible, setPasswordVisible] = useState({
+    login: false,
+    signup: false,
+    confirm: false
+  });
+
+  // API configuration
+  const API_BASE_URL = 'http://localhost:5000/api';
+  const SERVER_ORIGIN = (() => {
+    try { 
+      return new URL(API_BASE_URL).origin; 
+    } catch (e) { 
+      return 'http://localhost:5000'; 
+    }
+  })();
+  const HEALTH_ENDPOINT = `${SERVER_ORIGIN}/health`;
+
+  // Generate Captcha
+  const generateCaptcha = () => {
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    return {
+      question: `${num1} + ${num2} = ?`,
+      answer: num1 + num2
+    };
+  };
+
+  // Initialize component
+  useEffect(() => {
+    setCaptcha(generateCaptcha());
+
+    // Check for remembered user
+    try {
+      const rememberedUser = JSON.parse(localStorage.getItem('rememberedUser') || 'null');
+      if (rememberedUser) {
+        setLoginData({
+          email: rememberedUser.email,
+          password: rememberedUser.password || ''
+        });
+        setRememberMe(true);
+      }
+    } catch (e) {
+      // Ignore parse errors
+      console.warn('Error parsing remembered user:', e);
+    }
+  }, []);
+
+  // Toggle Password Visibility
+  const togglePasswordVisibility = (field) => {
+    setPasswordVisible(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
+  };
+
+  // Check Password Strength
+  const checkPasswordStrength = (password) => {
+    let strength = 0;
+
+    if (password.length >= 8) strength++;
+    if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+    if (password.match(/[0-9]/)) strength++;
+    if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+    setPasswordStrength(strength);
+    return strength;
+  };
+
+  // Generate Strong Password
+  const generatePassword = () => {
+    const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+    const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numbers = '0123456789';
+    const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+    let password = '';
+    password += lowercase[Math.floor(Math.random() * lowercase.length)];
+    password += uppercase[Math.floor(Math.random() * uppercase.length)];
+    password += numbers[Math.floor(Math.random() * numbers.length)];
+    password += symbols[Math.floor(Math.random() * symbols.length)];
+
+    const allChars = lowercase + uppercase + numbers + symbols;
+    for (let i = 4; i < 12; i++) {
+      password += allChars[Math.floor(Math.random() * allChars.length)];
+    }
+
+    password = password.split('').sort(() => Math.random() - 0.5).join('');
+
+    setSignupData(prev => ({
+      ...prev,
+      password,
+      confirmPassword: password
+    }));
+
+    checkPasswordStrength(password);
+    showMessage('Strong password generated!', 'success');
+  };
+
+  // Show Message
+  const showMessage = (message, type = 'info') => {
+    const id = Date.now();
+    setMessages(prev => [...prev, { id, message, type }]);
+
+    setTimeout(() => {
+      setMessages(prev => prev.filter(msg => msg.id !== id));
+    }, 5000);
+  };
+
+  // API call function - FIXED VERSION
+  const apiCall = async (endpoint, method = 'GET', data = null, timeoutMs = 8000) => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      const options = {
+        method,
+        headers: { 
+          'Content-Type': 'application/json',
+        },
+        signal: controller.signal,
+        credentials: 'include' // Important for cookies/sessions
+      };
+      
+      if (data && (method === 'POST' || method === 'PUT')) {
+        options.body = JSON.stringify(data);
+      }
+
+      const res = await fetch(`${API_BASE_URL}${endpoint}`, options);
+      clearTimeout(timer);
+
+      // Handle non-JSON responses
+      const contentType = res.headers.get('content-type') || '';
+      let payload = null;
+
+      try {
+        if (contentType.includes('application/json')) {
+          payload = await res.json();
+        } else {
+          const text = await res.text();
+          // Try to parse as JSON if it looks like JSON
+          if (text.trim().startsWith('{') || text.trim().startsWith('[')) {
+            payload = JSON.parse(text);
+          } else {
+            payload = { message: text };
+          }
+        }
+      } catch (parseErr) {
+        console.warn('Failed to parse response as JSON:', parseErr);
+        payload = { message: await res.text() };
+      }
+
+      if (!res.ok) {
+        // Handle 401 specifically for invalid credentials
+        if (res.status === 401) {
+          const errorMsg = payload?.message || payload?.error || 'Invalid credentials';
+          const err = new Error(errorMsg);
+          err.status = res.status;
+          err.payload = payload;
+          throw err;
+        }
+
+        const errorMsg = payload?.message || payload?.error || `Request failed: ${res.status}`;
+        const err = new Error(errorMsg);
+        err.status = res.status;
+        err.payload = payload;
+        throw err;
+      }
+
+      return payload;
+    } catch (err) {
+      clearTimeout(timer);
+      console.error('API call error:', err);
+
+      if (err.name === 'AbortError') {
+        showMessage('Request timed out. Backend may be slow or unreachable.', 'error');
+      } else if (err instanceof TypeError) {
+        // Network/CORS error
+        try {
+          const healthRes = await fetch(HEALTH_ENDPOINT, { 
+            method: 'GET',
+            signal: controller.signal 
+          });
+          if (!healthRes.ok) throw new Error('Health check failed');
+          showMessage('Network error while calling API. Check browser console and backend CORS.', 'error');
+        } catch (healthErr) {
+          showMessage('Cannot reach backend. Is the server running?', 'error');
+        }
+      } else {
+        // Show user-friendly error message
+        const userMessage = err.message || 'An unexpected error occurred';
+        showMessage(userMessage, 'error');
+      }
+
+      throw err;
+    }
+  };
+
+  // Form Handlers - FIXED VERSION
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Validate captcha
+    if (parseInt(captchaInput, 10) !== captcha.answer) {
+      showMessage('Incorrect captcha answer!', 'error');
+      setCaptcha(generateCaptcha());
+      setCaptchaInput('');
+      return;
+    }
+
+    // Validate required fields
+    if (!loginData.email || !loginData.password) {
+      showMessage('Please fill in all required fields', 'error');
+      return;
+    }
+
+    try {
+      const result = await apiCall('/auth/login', 'POST', {
+        email: loginData.email.trim().toLowerCase(),
+        password: loginData.password
+      });
+
+      // Handle different response structures
+      const user = result.user || result;
+      const token = result.token || result.accessToken;
+
+      if (!user) {
+        throw new Error('Invalid response from server: user data missing');
+      }
+
+      // Remember me functionality - FIXED: Don't store password
+      if (rememberMe) {
+        localStorage.setItem('rememberedUser', JSON.stringify({
+          email: loginData.email
+        }));
+        if (token) {
+          localStorage.setItem('authToken', token);
+        }
+      } else {
+        localStorage.removeItem('rememberedUser');
+        if (token) {
+          sessionStorage.setItem('authToken', token);
+        }
+      }
+
+      setCurrentUser(user);
+      showMessage('Login successful! Redirecting...', 'success');
+
+      // Reset form
+      setLoginData({ email: '', password: '' });
+      setCaptchaInput('');
+      setCaptcha(generateCaptcha());
+
+      setTimeout(() => {
+        // Here you would typically redirect to dashboard
+        console.log('Redirecting to dashboard...', user);
+      }, 1500);
+    } catch (error) {
+      // Specific handling for invalid credentials
+      if (error.message.includes('Invalid credentials') || error.status === 401) {
+        showMessage('Invalid email or password. Please try again.', 'error');
+        setCaptcha(generateCaptcha());
+        setCaptchaInput('');
+      }
+      // Other errors are already handled in apiCall
+    }
+  };
+
+  const handleSignupSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Check captcha
+    if (parseInt(signupCaptchaInput, 10) !== captcha.answer) {
+      showMessage('Incorrect captcha answer!', 'error');
+      setCaptcha(generateCaptcha());
+      setSignupCaptchaInput('');
+      return;
+    }
+
+    if (signupData.password !== signupData.confirmPassword) {
+      showMessage('Passwords do not match!', 'error');
+      return;
+    }
+
+    if (checkPasswordStrength(signupData.password) < 3) {
+      showMessage('Password is too weak! Please use a stronger password.', 'error');
+      return;
+    }
+
+    if (!termsAccepted) {
+      showMessage('Please accept the terms and conditions', 'error');
+      return;
+    }
+
+    try {
+      const result = await apiCall('/auth/register', 'POST', {
+        name: signupData.name.trim(),
+        email: signupData.email.trim().toLowerCase(),
+        password: signupData.password
+      });
+
+      setPendingVerification({ email: signupData.email });
+      setShowVerification(true);
+
+      showMessage('Account created! Please check your email for verification code.', 'success');
+      
+      // Reset form
+      setSignupData({
+        name: '', email: '', password: '', confirmPassword: ''
+      });
+      setSignupCaptchaInput('');
+      setCaptcha(generateCaptcha());
+      setTermsAccepted(false);
+    } catch (error) {
+      // Error handled in apiCall
+    }
+  };
+
+  const handleVerificationSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!pendingVerification?.email) {
+      showMessage('No pending verification found. Please register or request a code first.', 'error');
+      return;
+    }
+
+    const emailToVerify = pendingVerification.email;
+
+    try {
+      await apiCall('/auth/verify-email', 'POST', {
+        email: emailToVerify,
+        code: verificationCode.trim()
+      });
+
+      setShowVerification(false);
+      setPendingVerification(null);
+      setVerificationCode('');
+      showMessage('Email verified successfully! Redirecting to login...', 'success');
+
+      setTimeout(() => {
+        setActiveForm('login');
+        setLoginData(prev => ({ ...prev, email: emailToVerify || prev.email }));
+      }, 1500);
+    } catch (error) {
+      // Error handled in apiCall
+    }
+  };
+
+  const handleForgotPasswordSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!forgotEmail) {
+      showMessage('Please enter your email address', 'error');
+      return;
+    }
+
+    try {
+      await apiCall('/auth/forgot-password', 'POST', {
+        email: forgotEmail.trim().toLowerCase()
+      });
+
+      showMessage('Password reset link sent to your email!', 'success');
+      setShowForgotPassword(false);
+      setForgotEmail('');
+    } catch (error) {
+      // Error handled in apiCall
+    }
+  };
+
+  const resendVerificationCode = async () => {
+    if (!pendingVerification?.email) {
+      showMessage('No email to resend code to. Please register first.', 'error');
+      return;
+    }
+    try {
+      await apiCall('/auth/send-verification', 'POST', { 
+        email: pendingVerification.email 
+      });
+      showMessage('Verification code resent to your email!', 'success');
+    } catch (error) {
+      // Error handled in apiCall
+    }
+  };
+
+  // Render Login Form
+  const renderLoginForm = () => (
+    <form onSubmit={handleLoginSubmit} className="space-y-6">
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          Email Address
+        </label>
+        <input
+          type="email"
+          id="email"
+          className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+          placeholder="Enter your email"
+          value={loginData.email}
+          onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+          required
+        />
+      </div>
+
+      <div>
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          Password
+        </label>
+        <div className="relative">
+          <input
+            type={passwordVisible.login ? "text" : "password"}
+            id="password"
+            className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 pr-12"
+            placeholder="Enter your password"
+            value={loginData.password}
+            onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+            required
+          />
+          <button
+            type="button"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200 p-1 rounded"
+            onClick={() => togglePasswordVisibility('login')}
+            aria-label={passwordVisible.login ? "Hide password" : "Show password"}
+          >
+            <EyeIcon visible={passwordVisible.login} />
+          </button>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="remember"
+            className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+          />
+          <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
+            Remember me
+          </label>
+        </div>
+
+        <button
+          type="button"
+          className="text-sm text-purple-600 hover:text-purple-800 font-medium transition-colors duration-200"
+          onClick={() => setShowForgotPassword(true)}
+        >
+          Forgot Password?
+        </button>
+      </div>
+
+      <div>
+        <label htmlFor="captcha" className="block text-sm font-medium text-gray-700 mb-1">
+          Security Check: {captcha.question}
+        </label>
+        <input
+          type="number"
+          id="captcha"
+          className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+          placeholder="Enter the answer"
+          value={captchaInput}
+          onChange={(e) => setCaptchaInput(e.target.value)}
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+      >
+        Sign In
+      </button>
+
+      <div className="text-center mt-4">
+        <p className="text-sm text-gray-600">
+          Don't have an account?{' '}
+          <button
+            type="button"
+            className="text-purple-600 hover:text-purple-800 font-medium transition-colors duration-200"
+            onClick={() => setActiveForm('signup')}
+          >
+            Sign Up
+          </button>
+        </p>
+      </div>
+    </form>
+  );
+
+  // Render Signup Form
+  const renderSignupForm = () => (
+    <form onSubmit={handleSignupSubmit} className="space-y-6">
+      <div>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          Full Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+          placeholder="Enter your full name"
+          value={signupData.name}
+          onChange={(e) => setSignupData({ ...signupData, name: e.target.value })}
+          required
+        />
+      </div>
+
+      <div>
+        <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-1">
+          Email Address
+        </label>
+        <input
+          type="email"
+          id="signup-email"
+          className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+          placeholder="Enter your email"
+          value={signupData.email}
+          onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
+          required
+        />
+      </div>
+
+      <div>
+        <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 mb-1">
+          Password
+          <button
+            type="button"
+            className="ml-2 text-xs text-purple-600 hover:text-purple-800 font-medium transition-colors duration-200"
+            onClick={generatePassword}
+          >
+            Generate Strong Password
+          </button>
+        </label>
+        <div className="relative">
+          <input
+            type={passwordVisible.signup ? "text" : "password"}
+            id="signup-password"
+            className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 pr-12"
+            placeholder="Create a strong password"
+            value={signupData.password}
+            onChange={(e) => {
+              setSignupData({ ...signupData, password: e.target.value });
+              checkPasswordStrength(e.target.value);
+            }}
+            required
+          />
+          <button
+            type="button"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200 p-1 rounded"
+            onClick={() => togglePasswordVisibility('signup')}
+            aria-label={passwordVisible.signup ? "Hide password" : "Show password"}
+          >
+            <EyeIcon visible={passwordVisible.signup} />
+          </button>
+        </div>
+
+        {signupData.password && (
+          <PasswordStrength strength={passwordStrength} />
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-1">
+          Confirm Password
+        </label>
+        <div className="relative">
+          <input
+            type={passwordVisible.confirm ? "text" : "password"}
+            id="confirm-password"
+            className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 pr-12"
+            placeholder="Confirm your password"
+            value={signupData.confirmPassword}
+            onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
+            required
+          />
+          <button
+            type="button"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200 p-1 rounded"
+            onClick={() => togglePasswordVisibility('confirm')}
+            aria-label={passwordVisible.confirm ? "Hide password" : "Show password"}
+          >
+            <EyeIcon visible={passwordVisible.confirm} />
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <label htmlFor="signup-captcha" className="block text-sm font-medium text-gray-700 mb-1">
+          Security Check: {captcha.question}
+        </label>
+        <input
+          type="number"
+          id="signup-captcha"
+          className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+          placeholder="Enter the answer"
+          value={signupCaptchaInput}
+          onChange={(e) => setSignupCaptchaInput(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className="flex items-start">
+        <input
+          type="checkbox"
+          id="terms"
+          className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded mt-1"
+          checked={termsAccepted}
+          onChange={(e) => setTermsAccepted(e.target.checked)}
+          required
+        />
+        <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
+          I agree to the <a href="#" className="text-purple-600 hover:text-purple-800 font-medium transition-colors duration-200">Terms and Conditions</a>
+        </label>
+      </div>
+
+      <button
+        type="submit"
+        className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+      >
+        Create Account
+      </button>
+
+      <div className="text-center mt-4">
+        <p className="text-sm text-gray-600">
+          Already have an account?{' '}
+          <button
+            type="button"
+            className="text-purple-600 hover:text-purple-800 font-medium transition-colors duration-200"
+            onClick={() => setActiveForm('login')}
+          >
+            Sign In
+          </button>
+        </p>
+      </div>
+    </form>
+  );
+
+  // Render Forgot Password Modal
+  const renderForgotPasswordModal = () => (
+    <Modal
+      isOpen={showForgotPassword}
+      onClose={() => setShowForgotPassword(false)}
+      title="Reset Password"
+    >
+      <p className="text-gray-600 mb-6">
+        Enter your email address and we'll send you a link to reset your password.
+      </p>
+
+      <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="forgot-email" className="block text-sm font-medium text-gray-700 mb-1">
+            Email Address
+          </label>
+          <input
+            type="email"
+            id="forgot-email"
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+            placeholder="Enter your email"
+            value={forgotEmail}
+            onChange={(e) => setForgotEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition duration-200 shadow-md hover:shadow-lg"
+        >
+          Send Reset Link
+        </button>
+      </form>
+    </Modal>
+  );
+
+  // Render Verification Modal
+  const renderVerificationModal = () => (
+    <Modal
+      isOpen={showVerification}
+      onClose={() => {
+        setShowVerification(false);
+        setPendingVerification(null);
+      }}
+      title="Verify Your Email"
+    >
+      <p className="text-gray-600 mb-6">
+        We've sent a verification code to <strong className="text-purple-600">{pendingVerification?.email}</strong>.
+        Please enter the code below to verify your email address.
+      </p>
+
+      <form onSubmit={handleVerificationSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="verification-code" className="block text-sm font-medium text-gray-700 mb-1">
+            Verification Code
+          </label>
+          <input
+            type="text"
+            id="verification-code"
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+            placeholder="Enter verification code"
+            value={verificationCode}
+            onChange={(e) => setVerificationCode(e.target.value)}
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition duration-200 shadow-md hover:shadow-lg"
+        >
+          Verify Email
+        </button>
+      </form>
+
+      <div className="text-center mt-4">
+        <p className="text-sm text-gray-600">
+          Didn't receive the code?{' '}
+          <button
+            type="button"
+            className="text-purple-600 hover:text-purple-800 font-medium transition-colors duration-200"
+            onClick={resendVerificationCode}
+          >
+            Resend Code
+          </button>
+        </p>
+      </div>
+    </Modal>
+  );
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-indigo-600 p-4">
+      {/* Main Container */}
+      <div className="w-full max-w-md">
+        {/* Auth Form Container */}
+        <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-2xl shadow-2xl p-8 animate-fade-in border border-white border-opacity-30">
+          {/* Logo/Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full mb-4 shadow-lg">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-800">
+              {activeForm === 'login' ? 'Welcome Back' : 'Create Account'}
+            </h1>
+            <p className="text-gray-600 mt-2">
+              {activeForm === 'login'
+                ? 'Sign in to continue to your account'
+                : 'Sign up to get started'}
+            </p>
+          </div>
+
+          {/* Render the appropriate form */}
+          {activeForm === 'login' ? renderLoginForm() : renderSignupForm()}
+        </div>
+
+        {/* Modals */}
+        {renderForgotPasswordModal()}
+        {renderVerificationModal()}
+
+        {/* Success/Error Messages */}
+        <div className="fixed top-4 right-4 z-50 max-w-sm w-full space-y-2">
+          {messages.map(msg => (
+            <Message
+              key={msg.id}
+              message={msg.message}
+              type={msg.type}
+              onClose={() => setMessages(prev => prev.filter(m => m.id !== msg.id))}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AuthForm;

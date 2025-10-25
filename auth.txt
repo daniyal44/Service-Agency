@@ -1,0 +1,3380 @@
+ import React, { useState, useEffect } from 'react';
+
+// // inline eye icon to avoid relying on external fonts
+// const EyeIcon = ({ visible }) => (
+//   visible ? (
+//     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+//       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4-9-7s4-7 9-7a9.964 9.964 0 014.031.84M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+//       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3l18 18" />
+//     </svg>
+//   ) : (
+//     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+//       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c5 0 9 4 9 7 0 1.18-.293 2.29-.805 3.286M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+//     </svg>
+//   )
+// );
+
+// const AuthForm = () => {
+//   // State management
+//   const [currentUser, setCurrentUser] = useState(null);
+//   const [activeForm, setActiveForm] = useState('login');
+//   const [showForgotPassword, setShowForgotPassword] = useState(false);
+//   const [showVerification, setShowVerification] = useState(false);
+//   const [messages, setMessages] = useState([]);
+//   const [pendingVerification, setPendingVerification] = useState(null);
+  
+//   // Form data states
+//   const [loginData, setLoginData] = useState({ email: '', password: '' });
+//   const [signupData, setSignupData] = useState({ 
+//     name: '', email: '', password: '', confirmPassword: '' 
+//   });
+//   const [forgotEmail, setForgotEmail] = useState('');
+//   const [verificationCode, setVerificationCode] = useState('');
+//   const [rememberMe, setRememberMe] = useState(false);
+//   const [termsAccepted, setTermsAccepted] = useState(false);
+  
+//   // Captcha state
+//   const [captcha, setCaptcha] = useState({ question: '', answer: 0 });
+//   const [captchaInput, setCaptchaInput] = useState('');
+//   const [signupCaptchaInput, setSignupCaptchaInput] = useState('');
+  
+//   // Password strength
+//   const [passwordStrength, setPasswordStrength] = useState(0);
+  
+//   // Password visibility
+//   const [passwordVisible, setPasswordVisible] = useState({
+//     login: false,
+//     signup: false,
+//     confirm: false
+//   });
+
+//   // API base URL - backend runs on port 5173 by default
+//   const API_BASE_URL = 'http://localhost:5173/api';
+
+//   // Derived server origin and health endpoint
+//   const SERVER_ORIGIN = (() => {
+//     try { return new URL(API_BASE_URL).origin; } catch (e) { return 'http://localhost:4000'; }
+//   })();
+//   const HEALTH_ENDPOINT = `${SERVER_ORIGIN}/health`;
+  
+//   // Generate Captcha
+//   const generateCaptcha = () => {
+//     const num1 = Math.floor(Math.random() * 10) + 1;
+//     const num2 = Math.floor(Math.random() * 10) + 1;
+//     return {
+//       question: `${num1} + ${num2} = ?`,
+//       answer: num1 + num2
+//     };
+//   };
+
+//   // Initialize captcha on component mount
+//   useEffect(() => {
+//     setCaptcha(generateCaptcha());
+    
+//     // Check for remembered user
+//     try {
+//       const rememberedUser = JSON.parse(localStorage.getItem('rememberedUser') || 'null');
+//       if (rememberedUser) {
+//         setLoginData({
+//           email: rememberedUser.email,
+//           password: rememberedUser.password || ''
+//         });
+//         setRememberMe(true);
+//       }
+//     } catch (e) {
+//       // ignore parse errors
+//     }
+//   }, []);
+
+//   // Toggle Password Visibility
+//   const togglePasswordVisibility = (field) => {
+//     setPasswordVisible(prev => ({
+//       ...prev,
+//       [field]: !prev[field]
+//     }));
+//   };
+
+//   // Check Password Strength
+//   const checkPasswordStrength = (password) => {
+//     let strength = 0;
+    
+//     if (password.length >= 8) strength++;
+//     if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+//     if (password.match(/[0-9]/)) strength++;
+//     if (password.match(/[^a-zA-Z0-9]/)) strength++;
+    
+//     setPasswordStrength(strength);
+//     return strength;
+//   };
+
+//   // Generate Strong Password
+//   const generatePassword = () => {
+//     const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+//     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+//     const numbers = '0123456789';
+//     const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    
+//     let password = '';
+//     password += lowercase[Math.floor(Math.random() * lowercase.length)];
+//     password += uppercase[Math.floor(Math.random() * uppercase.length)];
+//     password += numbers[Math.floor(Math.random() * numbers.length)];
+//     password += symbols[Math.floor(Math.random() * symbols.length)];
+    
+//     const allChars = lowercase + uppercase + numbers + symbols;
+//     for (let i = 4; i < 12; i++) {
+//       password += allChars[Math.floor(Math.random() * allChars.length)];
+//     }
+    
+//     password = password.split('').sort(() => Math.random() - 0.5).join('');
+    
+//     setSignupData(prev => ({
+//       ...prev,
+//       password,
+//       confirmPassword: password
+//     }));
+    
+//     checkPasswordStrength(password);
+//     showMessage('Strong password generated!', 'success');
+//   };
+
+//   // Show Message
+//   const showMessage = (message, type = 'info') => {
+//     const id = Date.now();
+//     setMessages(prev => [...prev, { id, message, type }]);
+    
+//     setTimeout(() => {
+//       setMessages(prev => prev.filter(msg => msg.id !== id));
+//     }, 5000);
+//   };
+
+//   // API call function
+//   const apiCall = async (endpoint, method = 'GET', data = null, timeoutMs = 8000) => {
+//     const controller = new AbortController();
+//     const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+//     try {
+//       const options = {
+//         method,
+//         headers: { 'Content-Type': 'application/json' },
+//         signal: controller.signal,
+//       };
+//       if (data && (method === 'POST' || method === 'PUT')) options.body = JSON.stringify(data);
+
+//       const res = await fetch(`${API_BASE_URL}${endpoint}`, options);
+//       clearTimeout(timer);
+
+//       // Safely parse response as JSON when possible, otherwise get text
+//       let payload = null;
+//       const contentType = res.headers.get('content-type') || '';
+//       try {
+//         if (contentType.includes('application/json')) {
+//           payload = await res.json();
+//         } else {
+//           payload = await res.text();
+//         }
+//       } catch (parseErr) {
+//         // fallback if parsing fails
+//         try { payload = await res.text(); } catch (e) { payload = null; }
+//       }
+
+//       if (!res.ok) {
+//         // Build a helpful error message using body when available
+//         const bodyMsg = typeof payload === 'string' ? payload : (payload?.error || payload?.message);
+//         const msg = bodyMsg || `${res.status} ${res.statusText}` || `Request failed: ${res.status}`;
+//         const err = new Error(msg);
+//         // attach additional info for callers / debugging
+//         err.status = res.status;
+//         err.payload = payload;
+//         throw err;
+//       }
+
+//       return payload;
+//     } catch (err) {
+//       clearTimeout(timer);
+//       console.error('API call error:', err);
+
+//       if (err.name === 'AbortError') {
+//         showMessage('Request timed out. Backend may be slow or unreachable.', 'error');
+//       } else if (err instanceof TypeError) {
+//         // likely network/CORS; attempt a quick health check to clarify
+//         try {
+//           const h = await fetch(HEALTH_ENDPOINT, { method: 'GET' });
+//           if (!h.ok) throw new Error('health check bad status');
+//           showMessage('Network error while calling API (possible CORS). Check browser console and backend CORS.', 'error');
+//         } catch (healthErr) {
+//           showMessage('Cannot reach backend. Is the server running? (checked /health)', 'error');
+//         }
+//       } else {
+//         // Show server-provided message when available
+//         const serverMsg = err.payload && typeof err.payload === 'string'
+//           ? err.payload
+//           : (err.payload && typeof err.payload === 'object' ? (err.payload.error || err.payload.message) : err.message);
+//         showMessage(`Server error (${err.status || 'error'}): ${serverMsg || err.message}`, 'error');
+//       }
+
+//       throw err;
+//     }
+//   };
+  
+//   // Form Handlers
+//   const handleLoginSubmit = async (e) => {
+//     e.preventDefault();
+    
+//     // Check captcha
+//     if (parseInt(captchaInput, 10) !== captcha.answer) {
+//       showMessage('Incorrect captcha answer!', 'error');
+//       setCaptcha(generateCaptcha());
+//       return;
+//     }
+    
+//     try {
+//       const result = await apiCall('/auth/login', 'POST', {
+//         email: loginData.email,
+//         password: loginData.password
+//       });
+      
+//       const { user, token } = result;
+      
+//       // Remember me functionality
+//       if (rememberMe) {
+//         localStorage.setItem('rememberedUser', JSON.stringify({ 
+//           email: loginData.email
+//         }));
+//         localStorage.setItem('authToken', token);
+//       } else {
+//         localStorage.removeItem('rememberedUser');
+//         sessionStorage.setItem('authToken', token);
+//       }
+      
+//       setCurrentUser(user);
+//       showMessage('Login successful! Redirecting...', 'success');
+      
+//       setTimeout(() => {
+//         setActiveForm('login'); // keep simple
+//       }, 1500);
+//     } catch (error) {
+//       // handled in apiCall
+//     }
+//   };
+
+//   const handleSignupSubmit = async (e) => {
+//     e.preventDefault();
+    
+//     // Check captcha
+//     if (parseInt(signupCaptchaInput, 10) !== captcha.answer) {
+//       showMessage('Incorrect captcha answer!', 'error');
+//       setCaptcha(generateCaptcha());
+//       return;
+//     }
+    
+//     if (signupData.password !== signupData.confirmPassword) {
+//       showMessage('Passwords do not match!', 'error');
+//       return;
+//     }
+    
+//     if (checkPasswordStrength(signupData.password) < 3) {
+//       showMessage('Password is too weak! Please use a stronger password.', 'error');
+//       return;
+//     }
+    
+//     if (!termsAccepted) {
+//       showMessage('Please accept the terms and conditions', 'error');
+//       return;
+//     }
+    
+//     try {
+//       const result = await apiCall('/auth/register', 'POST', {
+//         name: signupData.name,
+//         email: signupData.email,
+//         password: signupData.password
+//       });
+      
+//       setPendingVerification({ email: signupData.email });
+//       setShowVerification(true);
+      
+//       showMessage('Account created! Please check your email for verification code.', 'success');
+//     } catch (error) {
+//       // handled in apiCall
+//     }
+//   };
+
+//   const handleVerificationSubmit = async (e) => {
+//     e.preventDefault();
+    
+//     if (!pendingVerification?.email) {
+//       showMessage('No pending verification found. Please register or request a code first.', 'error');
+//       return;
+//     }
+
+//     // capture the email before clearing pendingVerification
+//     const emailToVerify = pendingVerification.email;
+
+//     try {
+//       await apiCall('/auth/verify-email', 'POST', {
+//         email: emailToVerify,
+//         code: verificationCode
+//       });
+      
+//       setShowVerification(false);
+//       setPendingVerification(null);
+//       showMessage('Email verified successfully! Redirecting to login...', 'success');
+      
+//       setTimeout(() => {
+//         setActiveForm('login');
+//         setLoginData(prev => ({ ...prev, email: emailToVerify || prev.email }));
+//       }, 1500);
+//     } catch (error) {
+//       // handled in apiCall
+//     }
+//   };
+  
+//   const handleForgotPasswordSubmit = async (e) => {
+//     e.preventDefault();
+    
+//     try {
+//       // endpoint not implemented in backend stub — placeholder
+//       await apiCall('/auth/forgot-password', 'POST', {
+//         email: forgotEmail
+//       });
+      
+//       showMessage('Password reset link sent to your email!', 'success');
+//       setShowForgotPassword(false);
+//     } catch (error) {
+//       // handled in apiCall
+//     }
+//   };
+  
+//   const resendVerificationCode = async () => {
+//     if (!pendingVerification?.email) {
+//       showMessage('No email to resend code to. Please register first.', 'error');
+//       return;
+//     }
+//     try {
+//       await apiCall('/auth/send-verification', 'POST', { email: pendingVerification.email });
+//       showMessage('Verification code resent to your email!', 'success');
+//     } catch (error) {
+//       // handled in apiCall
+//     }
+//   };
+
+//   // Render Login Form
+//   const renderLoginForm = () => (
+//     <form onSubmit={handleLoginSubmit} className="space-y-6">
+//       <div>
+//         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+//           Email Address
+//         </label>
+//         <input
+//           type="email"
+//           id="email"
+//           className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+//           placeholder="Enter your email"
+//           value={loginData.email}
+//           onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+//           required
+//         />
+//       </div>
+      
+//       <div>
+//         <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+//           Password
+//         </label>
+//         <div className="relative">
+//           <input
+//             type={passwordVisible.login ? "text" : "password"}
+//             id="password"
+//             className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 pr-12"
+//             placeholder="Enter your password"
+//             value={loginData.password}
+//             onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+//             required
+//           />
+//           <button
+//             type="button"
+//             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+//             onClick={() => togglePasswordVisibility('login')}
+//           >
+//             <EyeIcon visible={passwordVisible.login} />
+//           </button>
+//         </div>
+//       </div>
+      
+//       <div className="flex items-center justify-between">
+//         <div className="flex items-center">
+//           <input
+//             type="checkbox"
+//             id="remember"
+//             className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+//             checked={rememberMe}
+//             onChange={(e) => setRememberMe(e.target.checked)}
+//           />
+//           <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
+//             Remember me
+//           </label>
+//         </div>
+        
+//         <button
+//           type="button"
+//           className="text-sm text-purple-600 hover:text-purple-800 font-medium"
+//           onClick={() => setShowForgotPassword(true)}
+//         >
+//           Forgot Password?
+//         </button>
+//       </div>
+      
+//       <div>
+//         <label htmlFor="captcha" className="block text-sm font-medium text-gray-700 mb-1">
+//           Security Check: {captcha.question}
+//         </label>
+//         <input
+//           type="number"
+//           id="captcha"
+//           className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+//           placeholder="Enter the answer"
+//           value={captchaInput}
+//           onChange={(e) => setCaptchaInput(e.target.value)}
+//           required
+//         />
+//       </div>
+      
+//       <button
+//         type="submit"
+//         className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition duration-200 shadow-md"
+//       >
+//         Sign In
+//       </button>
+      
+//       <div className="text-center mt-4">
+//         <p className="text-sm text-gray-600">
+//           Don't have an account?{' '}
+//           <button
+//             type="button"
+//             className="text-purple-600 hover:text-purple-800 font-medium"
+//             onClick={() => setActiveForm('signup')}
+//           >
+//             Sign Up
+//           </button>
+//         </p>
+//       </div>
+//     </form>
+//   );
+
+//   // Render Signup Form
+//   const renderSignupForm = () => (
+//     <form onSubmit={handleSignupSubmit} className="space-y-6">
+//       <div>
+//         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+//           Full Name
+//         </label>
+//         <input
+//           type="text"
+//           id="name"
+//           className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+//           placeholder="Enter your full name"
+//           value={signupData.name}
+//           onChange={(e) => setSignupData({...signupData, name: e.target.value})}
+//           required
+//         />
+//       </div>
+      
+//       <div>
+//         <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-1">
+//           Email Address
+//         </label>
+//         <input
+//           type="email"
+//           id="signup-email"
+//           className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+//           placeholder="Enter your email"
+//           value={signupData.email}
+//           onChange={(e) => setSignupData({...signupData, email: e.target.value})}
+//           required
+//         />
+//       </div>
+      
+//       <div>
+//         <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 mb-1">
+//           Password
+//           <button
+//             type="button"
+//             className="ml-2 text-xs text-purple-600 hover:text-purple-800"
+//             onClick={generatePassword}
+//           >
+//             Generate Strong Password
+//           </button>
+//         </label>
+//         <div className="relative">
+//           <input
+//             type={passwordVisible.signup ? "text" : "password"}
+//             id="signup-password"
+//             className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 pr-12"
+//             placeholder="Create a strong password"
+//             value={signupData.password}
+//             onChange={(e) => {
+//               setSignupData({...signupData, password: e.target.value});
+//               checkPasswordStrength(e.target.value);
+//             }}
+//             required
+//           />
+//           <button
+//             type="button"
+//             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+//             onClick={() => togglePasswordVisibility('signup')}
+//           >
+//             <EyeIcon visible={passwordVisible.signup} />
+//           </button>
+//         </div>
+        
+//         {signupData.password && (
+//           <div className="mt-2">
+//             <div className="flex items-center mb-1">
+//               <div className="w-full bg-gray-200 rounded-full h-2">
+//                 <div 
+//                   className={`h-2 rounded-full ${
+//                     passwordStrength === 0 ? 'bg-red-500' :
+//                     passwordStrength === 1 ? 'bg-red-500' :
+//                     passwordStrength === 2 ? 'bg-yellow-500' :
+//                     passwordStrength === 3 ? 'bg-green-500' : 'bg-green-600'
+//                   }`}
+//                   style={{ width: `${(passwordStrength / 4) * 100}%` }}
+//                 ></div>
+//               </div>
+//             </div>
+//             <p className="text-xs text-gray-600">
+//               {passwordStrength === 0 ? 'Very Weak' :
+//                passwordStrength === 1 ? 'Weak' :
+//                passwordStrength === 2 ? 'Medium' :
+//                passwordStrength === 3 ? 'Strong' : 'Very Strong'}
+//             </p>
+//           </div>
+//         )}
+//       </div>
+      
+//       <div>
+//         <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-1">
+//           Confirm Password
+//         </label>
+//         <div className="relative">
+//           <input
+//             type={passwordVisible.confirm ? "text" : "password"}
+//             id="confirm-password"
+//             className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 pr-12"
+//             placeholder="Confirm your password"
+//             value={signupData.confirmPassword}
+//             onChange={(e) => setSignupData({...signupData, confirmPassword: e.target.value})}
+//             required
+//           />
+//           <button
+//             type="button"
+//             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+//             onClick={() => togglePasswordVisibility('confirm')}
+//           >
+//             <EyeIcon visible={passwordVisible.confirm} />
+//           </button>
+//         </div>
+//       </div>
+      
+//       <div>
+//         <label htmlFor="signup-captcha" className="block text-sm font-medium text-gray-700 mb-1">
+//           Security Check: {captcha.question}
+//         </label>
+//         <input
+//           type="number"
+//           id="signup-captcha"
+//           className="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+//           placeholder="Enter the answer"
+//           value={signupCaptchaInput}
+//           onChange={(e) => setSignupCaptchaInput(e.target.value)}
+//           required
+//         />
+//       </div>
+      
+//       <div className="flex items-center">
+//         <input
+//           type="checkbox"
+//           id="terms"
+//           className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+//           checked={termsAccepted}
+//           onChange={(e) => setTermsAccepted(e.target.checked)}
+//           required
+//         />
+//         <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
+//           I agree to the <a href="#" className="text-purple-600 hover:text-purple-800">Terms and Conditions</a>
+//         </label>
+//       </div>
+      
+//       <button
+//         type="submit"
+//         className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition duration-200 shadow-md"
+//       >
+//         Create Account
+//       </button>
+      
+//       <div className="text-center mt-4">
+//         <p className="text-sm text-gray-600">
+//           Already have an account?{' '}
+//           <button
+//             type="button"
+//             className="text-purple-600 hover:text-purple-800 font-medium"
+//             onClick={() => setActiveForm('login')}
+//           >
+//             Sign In
+//           </button>
+//         </p>
+//       </div>
+//     </form>
+//   );
+
+//   // Render Forgot Password Modal
+//   const renderForgotPasswordModal = () => (
+//     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+//       <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md animate-scale-in">
+//         <div className="flex justify-between items-center mb-4">
+//           <h2 className="text-2xl font-bold text-gray-800">Reset Password</h2>
+//           <button
+//             onClick={() => setShowForgotPassword(false)}
+//             className="text-gray-500 hover:text-gray-700"
+//           >
+//             <i className="fas fa-times"></i>
+//           </button>
+//         </div>
+        
+//         <p className="text-gray-600 mb-6">
+//           Enter your email address and we'll send you a link to reset your password.
+//         </p>
+        
+//         <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
+//           <div>
+//             <label htmlFor="forgot-email" className="block text-sm font-medium text-gray-700 mb-1">
+//               Email Address
+//             </label>
+//             <input
+//               type="email"
+//               id="forgot-email"
+//               className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+//               placeholder="Enter your email"
+//               value={forgotEmail}
+//               onChange={(e) => setForgotEmail(e.target.value)}
+//               required
+//             />
+//           </div>
+          
+//           <button
+//             type="submit"
+//             className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition duration-200"
+//           >
+//             Send Reset Link
+//           </button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+
+//   // Render Verification Modal
+//   const renderVerificationModal = () => (
+//     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+//       <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md animate-scale-in">
+//         <div className="flex justify-between items-center mb-4">
+//           <h2 className="text-2xl font-bold text-gray-800">Verify Your Email</h2>
+//           <button
+//             onClick={() => {
+//               setShowVerification(false);
+//               setPendingVerification(null);
+//             }}
+//             className="text-gray-500 hover:text-gray-700"
+//           >
+//             <i className="fas fa-times"></i>
+//           </button>
+//         </div>
+        
+//         <p className="text-gray-600 mb-6">
+//           We've sent a verification code to <strong>{pendingVerification?.email}</strong>. 
+//           Please enter the code below to verify your email address.
+//         </p>
+        
+//         <form onSubmit={handleVerificationSubmit} className="space-y-4">
+//           <div>
+//             <label htmlFor="verification-code" className="block text-sm font-medium text-gray-700 mb-1">
+//               Verification Code
+//             </label>
+//             <input
+//               type="text"
+//               id="verification-code"
+//               className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200"
+//               placeholder="Enter verification code"
+//               value={verificationCode}
+//               onChange={(e) => setVerificationCode(e.target.value)}
+//               required
+//             />
+//           </div>
+          
+//           <button
+//             type="submit"
+//             className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition duration-200"
+//           >
+//             Verify Email
+//           </button>
+//         </form>
+        
+//         <div className="text-center mt-4">
+//           <p className="text-sm text-gray-600">
+//             Didn't receive the code?{' '}
+//             <button
+//               type="button"
+//               className="text-purple-600 hover:text-purple-800 font-medium"
+//               onClick={resendVerificationCode}
+//             >
+//               Resend Code
+//             </button>
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+
+//   // Message Component
+//   const Message = ({ message, type, onClose }) => (
+//     <div className={`p-4 mb-4 rounded-lg shadow-md flex items-center justify-between animate-slide-in ${
+//       type === 'error' ? 'bg-red-100 text-red-700' :
+//       type === 'success' ? 'bg-green-100 text-green-700' :
+//       'bg-blue-100 text-blue-700'
+//     }`}>
+//       <div className="flex items-center">
+//         <i className={`fas ${
+//           type === 'error' ? 'fa-exclamation-circle' :
+//           type === 'success' ? 'fa-check-circle' : 'fa-info-circle'
+//         } mr-3`}></i>
+//         <span>{message}</span>
+//       </div>
+//       <button
+//         onClick={onClose}
+//         className="ml-4 text-gray-500 hover:text-gray-700"
+//       >
+//         <i className="fas fa-times"></i>
+//       </button>
+//     </div>
+//   );
+
+//   return (
+//     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-indigo-600 p-4">
+//       {/* Main Container */}
+//       <div className="w-full max-w-md">
+//         {/* Auth Form Container */}
+//         <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-2xl shadow-2xl p-8 animate-fade-in">
+//           {/* Logo/Header */}
+//           <div className="text-center mb-8">
+//             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full mb-4">
+//               <i className="fas fa-shield-alt text-white text-2xl"></i>
+//             </div>
+//             <h1 className="text-3xl font-bold text-gray-800">
+//               {activeForm === 'login' ? 'Welcome Back' : 'Create Account'}
+//             </h1>
+//             <p className="text-gray-600 mt-2">
+//               {activeForm === 'login' 
+//                 ? 'Sign in to continue to your account' 
+//                 : 'Sign up to get started'}
+//             </p>
+//           </div>
+
+//           {/* Render the appropriate form */}
+//           {activeForm === 'login' ? renderLoginForm() : renderSignupForm()}
+//         </div>
+
+//         {/* Modals */}
+//         {showForgotPassword && renderForgotPasswordModal()}
+//         {showVerification && renderVerificationModal()}
+
+//         {/* Success/Error Messages */}
+//         <div className="fixed top-4 right-4 z-50 max-w-sm w-full">
+//           {messages.map(msg => (
+//             <Message 
+//               key={msg.id} 
+//               message={msg.message} 
+//               type={msg.type} 
+//               onClose={() => setMessages(prev => prev.filter(m => m.id !== msg.id))}
+//             />
+//           ))}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+ export default AuthForm;
+
+
+
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import './AccountSetting.css';
+// import { Link, useNavigate } from 'react-router-dom';
+
+// const Profile = () => {
+//   const [isMenuOpen, setIsMenuOpen] = useState(false);
+//   const [user, setUser] = useState({
+//     id: '',
+//     name: '',
+//     email: '',
+//     location: '',
+//     occupation: '',
+//     company: '',
+//     avatarUrl: '',
+//   });
+//   const [avatarFile, setAvatarFile] = useState(null);
+//   const [avatarPreview, setAvatarPreview] = useState('');
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState('');
+//   const navigate = useNavigate();
+
+//   // Replace these endpoints to match your backend
+//   const API_ME = '/api/auth/me';
+//   const API_USER = (id) => `/api/users/${id}`;
+//   const API_UPLOAD_AVATAR = (id) => `/api/users/${id}/avatar`;
+
+//   // helper to get token saved at login (example)
+//   const getToken = () => localStorage.getItem('token');
+
+//   useEffect(() => {
+//     // If user is logged in, fetch profile
+//     const token = getToken();
+//     if (!token) {
+//       // Not logged in -> redirect to auth form
+//       return;
+//     }
+
+//     const fetchProfile = async () => {
+//       try {
+//         setLoading(true);
+//         const res = await fetch(API_ME, {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         });
+//         if (!res.ok) throw new Error('Failed to fetch profile');
+//         const data = await res.json();
+//         // Expecting { id, name, email, location, occupation, company, avatarUrl }
+//         setUser((u) => ({ ...u, ...data }));
+//         setAvatarPreview(data.avatarUrl || '');
+//       } catch (err) {
+//         console.error(err);
+//         setError('Unable to load profile.');
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchProfile();
+//   }, []);
+
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setUser((prev) => ({ ...prev, [name]: value }));
+//   };
+
+//   const handleAvatarChange = (e) => {
+//     const file = e.target.files?.[0];
+//     if (!file) return;
+//     setAvatarFile(file);
+//     setAvatarPreview(URL.createObjectURL(file));
+//   };
+
+//   const uploadAvatar = async (userId) => {
+//     if (!avatarFile) return null;
+//     const token = getToken();
+//     const form = new FormData();
+//     form.append('avatar', avatarFile);
+//     const res = await fetch(API_UPLOAD_AVATAR(userId), {
+//       method: 'POST',
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//       body: form,
+//     });
+//     if (!res.ok) {
+//       throw new Error('Avatar upload failed');
+//     }
+//     return res.json(); // expect { avatarUrl: '...' }
+//   };
+
+//   const handleSaveProfile = async (e) => {
+//     e.preventDefault();
+//     setError('');
+//     const token = getToken();
+//     if (!token) {
+//       setError('You must be logged in to save profile.');
+//       navigate('/authform');
+//       return;
+//     }
+//     try {
+//       setLoading(true);
+//       // 1) If avatar selected, upload first
+//       if (avatarFile && user.id) {
+//         const uploadResult = await uploadAvatar(user.id);
+//         if (uploadResult?.avatarUrl) {
+//           setUser((prev) => ({ ...prev, avatarUrl: uploadResult.avatarUrl }));
+//         }
+//       }
+
+//       // 2) Save profile fields
+//       const payload = {
+//         name: user.name,
+//         email: user.email,
+//         location: user.location,
+//         occupation: user.occupation,
+//         company: user.company,
+//       };
+
+//       const res = await fetch(API_USER(user.id), {
+//         method: 'PUT',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${token}`,
+//         },
+//         body: JSON.stringify(payload),
+//       });
+
+//       if (!res.ok) {
+//         const errBody = await res.json().catch(() => null);
+//         throw new Error(errBody?.message || 'Failed to save profile');
+//       }
+
+//       const updated = await res.json();
+//       setUser((prev) => ({ ...prev, ...updated }));
+//       setAvatarFile(null);
+//       setError('');
+//       // Optionally show success toast or redirect
+//     } catch (err) {
+//       console.error(err);
+//       setError(err.message || 'Save failed');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   // Quick local save example after login (to be called by your login flow)
+//   // Use this to send new users to backend after auth
+//   const saveAfterLogin = async (authUser) => {
+//     // authUser: { id, name, email, avatarUrl?, token? }
+//     const token = authUser.token || getToken();
+//     if (!token) return;
+//     try {
+//       const res = await fetch('/api/users', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${token}`,
+//         },
+//         body: JSON.stringify(authUser),
+//       });
+//       if (!res.ok) {
+//         console.warn('Could not save user after login');
+//         return;
+//       }
+//       const saved = await res.json();
+//       setUser((prev) => ({ ...prev, ...saved }));
+//       localStorage.setItem('token', token);
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+
+//   return (
+//     <>
+//       <nav className="fixed w-full bg-slate-900/90 backdrop-blur-sm z-50 shadow-lg">
+//         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+//           <div className="flex justify-between items-center h-16">
+//             <div className="flex-shrink-0">
+//               <Link to="/" className="text-2xl font-bold text-white">
+//                 MDK <span className="text-teal-400">Agency</span>
+//               </Link>
+//             </div>
+
+//             <div className="">
+//               <div className="ml-10 flex items-baseline space-x-4">
+//                 <Link to="/" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-purple-800 transition-colors">
+//                   Home
+//                 </Link>
+//                 <Link to="/about" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-purple-800 transition-colors">
+//                   About
+//                 </Link>
+//                 <Link to="/services" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-purple-800 transition-colors">
+//                   Services
+//                 </Link>
+//                 <Link to="/contact" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-purple-800 transition-colors">
+//                   Contact
+//                 </Link>
+//                 <Link to="/authform" className="px-3 py-2 rounded-md text-sm font-medium bg-teal-500 text-white hover:bg-teal-600 transition-colors">
+//                   Login/SignUp
+//                 </Link>
+//                 <Link to="/profile" className="px-3 py-2 rounded-md text-sm font-medium bg-green-300 text-white hover:bg-green-500 transition-colors">
+//                   Profile
+//                 </Link>
+//               </div>
+//             </div>
+
+//             <div className="md:hidden flex items-center">
+//               <button
+//                 onClick={() => setIsMenuOpen(!isMenuOpen)}
+//                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+//               >
+//                 <span className="sr-only">Open main menu</span>
+//                 {!isMenuOpen ? (
+//                   <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+//                   </svg>
+//                 ) : (
+//                   <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+//                   </svg>
+//                 )}
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+
+//         {isMenuOpen && (
+//           <div className="md:hidden  bg-slate-800">
+//             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 lg:px-4">
+//               <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-purple-800">
+//                 Home
+//               </Link>
+//               <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-purple-800">
+//                 About
+//               </Link>
+//               <Link to="/services" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-purple-800">
+//                 Services
+//               </Link>
+//               <Link to="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-purple-800">
+//                 Contact
+//               </Link>
+//               <Link to="/authform" className="block px-3 py-2 rounded-md text-base font-medium bg-teal-500 text-white hover:bg-teal-600">
+//                 Login/SignUp
+//               </Link>
+//               <Link to="/profile" className="block px-3 py-2 rounded-md text-base font-medium bg-green-300 text-white hover:bg-green-500">
+//                 Profile
+//               </Link>
+//             </div>
+//           </div>
+//         )}
+//       </nav>
+
+//       <div className="flex flex-col h-screen bg-[#121826] text-white">
+//         <header className="bg-[#171f2c] px-6 py-3 flex justify-between items-center border-b border-gray-800">
+//           <h1 className="text-xl font-semibold">Account Settings</h1>
+
+//           <div className="flex items-center space-x-4">
+//             <div className="relative">
+//               <input type="text" placeholder="Search here..." className="bg-[#1e2533] rounded-full py-2 pl-10 pr-4 w-64 text-sm focus:outline-none" />
+//               <i className="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
+//             </div>
+
+//             <button className="p-2 rounded-full hover:bg-gray-700">
+//               <i className="fas fa-cog text-gray-400"></i>
+//             </button>
+
+//             <button className="p-2 rounded-full hover:bg-gray-700">
+//               <i className="fas fa-bell text-gray-400"></i>
+//             </button>
+
+//             <div className="flex items-center ml-2">
+//               <img src={avatarPreview || 'https://placehold.co/32x32/white/black?text=J'} alt="profile" className="w-8 h-8 rounded-full mr-2" />
+//               <span>{user.name || 'Guest'}</span>
+//             </div>
+//           </div>
+//         </header>
+
+//         <div className="flex flex-1 overflow-hidden">
+//           <aside className="w-60 bg-[#171f2c] p-4 flex-shrink-0 border-r border-gray-800">
+//             {/* Activities Section */}
+//             <div className="mb-6">
+//               <div className="flex items-center mb-2 cursor-pointer">
+//                 <i className="far fa-clock mr-3 text-gray-400"></i>
+//                 <span>Activities</span>
+//                 <span className="ml-auto bg-red-500 text-xs rounded-full w-5 h-5 flex items-center justify-center">1</span>
+//               </div>
+
+//               <div className="flex items-center cursor-pointer">
+//                 <i className="far fa-tasks mr-3 text-gray-400"></i>
+//                 <span>My Tasks</span>
+//                 <span className="ml-auto bg-blue-500 text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+//               </div>
+//             </div>
+
+//             {/* Settings Section */}
+//             <div className="mb-6">
+//               <div className="flex items-center justify-between mb-2 cursor-pointer">
+//                 <div className="flex items-center">
+//                   <i className="fas fa-cog mr-3 text-gray-400"></i>
+//                   <span>Settings</span>
+//                 </div>
+//                 <i className="fas fa-chevron-down text-gray-400"></i>
+//               </div>
+
+//               <div className="pl-8">
+//                 <div className="flex items-center mb-2 cursor-pointer">
+//                   <i className="far fa-user mr-3 text-gray-400"></i>
+//                   <span>Profile</span>
+//                   <i className="fas fa-chevron-right ml-auto text-gray-400 text-xs"></i>
+//                 </div>
+
+//                 <div className="flex items-center mb-2 cursor-pointer">
+//                   <i className="fas fa-lock mr-3 text-gray-400"></i>
+//                   <span>Security</span>
+//                 </div>
+
+//                 <div className="flex items-center mb-2 cursor-pointer">
+//                   <i className="far fa-calendar-alt mr-3 text-gray-400"></i>
+//                   <span>Sessions</span>
+//                 </div>
+
+//                 <div className="flex items-center mb-2 cursor-pointer">
+//                   <i className="far fa-comment-dots mr-3 text-gray-400"></i>
+//                   <span>Messages</span>
+//                 </div>
+//               </div>
+//             </div>
+
+//             {/* Password Section */}
+//             <div className="mb-6">
+//               <div className="flex items-center cursor-pointer">
+//                 <i className="fas fa-key mr-3 text-gray-400"></i>
+//                 <span>Password</span>
+//               </div>
+//             </div>
+
+//             {/* Organisation Section */}
+//             <div className="mb-6">
+//               <div className="flex items-center cursor-pointer">
+//                 <i className="fas fa-building mr-3 text-gray-400"></i>
+//                 <span>Organisation</span>
+//               </div>
+//             </div>
+
+//             {/* Appearance Section */}
+//             <div className="mb-6">
+//               <div className="flex items-center cursor-pointer">
+//                 <i className="fas fa-palette mr-3 text-gray-400"></i>
+//                 <span>Appearance</span>
+//               </div>
+//             </div>
+
+//             {/* Data Export Section */}
+//             <div className="mb-6">
+//               <div className="flex items-center cursor-pointer">
+//                 <i className="fas fa-download mr-3 text-gray-400"></i>
+//                 <span>Data export</span>
+//               </div>
+//             </div>
+
+//             {/* Notifications Section */}
+//             <div className="mb-6">
+//               <div className="flex items-center justify-between mb-2 cursor-pointer">
+//                 <div className="flex items-center">
+//                   <i className="fas fa-bell mr-3 text-gray-400"></i>
+//                   <span>Notifications</span>
+//                 </div>
+//                 <i className="fas fa-chevron-down text-gray-400"></i>
+//               </div>
+
+//               <div className="pl-8">
+//                 <div className="flex items-center mb-2 cursor-pointer">
+//                   <i className="far fa-envelope mr-3 text-gray-400"></i>
+//                   <span>Email notification</span>
+//                   <span className="ml-auto bg-red-500 text-xs rounded-full w-5 h-5 flex items-center justify-center">1</span>
+//                 </div>
+
+//                 <div className="flex items-center mb-2 cursor-pointer">
+//                   <i className="far fa-chart-bar mr-3 text-gray-400"></i>
+//                   <span>Account activity</span>
+//                 </div>
+
+//                 <div className="flex items-center mb-2 cursor-pointer">
+//                   <i className="fas fa-exclamation-triangle mr-3 text-gray-400"></i>
+//                   <span>Alerts</span>
+//                 </div>
+//               </div>
+//             </div>
+//           </aside>
+
+//           <main className="flex-1 overflow-y-auto p-6">
+//             {/* Profile Banner */}
+//             <div className="profile-banner relative h-40 rounded-lg mb-4">
+//               <div className="absolute bottom-0 left-0 transform translate-y-1/2">
+//                 <div className="relative">
+//                   <img src={avatarPreview || 'https://placehold.co/80x80/white/black?text=JO'} alt="profile" className="w-20 h-20 rounded-full border-4 border-[#171f2c]" />
+//                   <div className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-1.5">
+//                     <label htmlFor="avatar-upload" className="cursor-pointer text-white text-xs">
+//                       <i className="fas fa-camera" />
+//                     </label>
+//                     <input id="avatar-upload" type="file" accept="image/*" onChange={handleAvatarChange} style={{ display: 'none' }} />
+//                   </div>
+//                 </div>
+//               </div>
+
+//               <div className="absolute top-3 right-3">
+//                 <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md flex items-center" onClick={() => document.getElementById('avatar-upload')?.click()}>
+//                   <i className="fas fa-edit mr-2"></i>
+//                   Edit Cover
+//                 </button>
+//               </div>
+//             </div>
+
+//             {/* Personal Information Form */}
+//             <div className="bg-[#1e2533] rounded-lg p-6">
+//               <h2 className="text-xl font-semibold mb-6">Personal Information</h2>
+
+//               {error && <div className="mb-4 text-red-400">{error}</div>}
+//               {loading && <div className="mb-4 text-gray-300">Saving...</div>}
+
+//               <form onSubmit={handleSaveProfile}>
+//                 <div className="grid grid-cols-2 gap-6 mb-6">
+//                   <div>
+//                     <label className="block text-sm mb-2">Name *</label>
+//                     <input name="name" type="text" value={user.name} onChange={handleChange} className="w-full bg-[#232b3a] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+//                   </div>
+
+//                   <div>
+//                     <label className="block text-sm mb-2">Company *</label>
+//                     <input name="company" type="text" value={user.company} onChange={handleChange} className="w-full bg-[#232b3a] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+//                   </div>
+//                 </div>
+
+//                 <div className="grid grid-cols-2 gap-6 mb-6">
+//                   <div>
+//                     <label className="block text-sm mb-2">Email *</label>
+//                     <input name="email" type="email" value={user.email} onChange={handleChange} className="w-full bg-[#232b3a] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+//                   </div>
+
+//                   <div>
+//                     <label className="block text-sm mb-2">Location *</label>
+//                     <input name="location" type="text" value={user.location} onChange={handleChange} className="w-full bg-[#232b3a] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+//                   </div>
+//                 </div>
+
+//                 <div className="grid grid-cols-2 gap-6 mb-6">
+//                   <div>
+//                     <label className="block text-sm mb-2">Occupation *</label>
+//                     <input name="occupation" type="text" value={user.occupation} onChange={handleChange} className="w-full bg-[#232b3a] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+//                   </div>
+
+//                   <div className="flex items-end">
+//                     <button type="submit" className="ml-auto bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md">
+//                       Save Profile
+//                     </button>
+//                   </div>
+//                 </div>
+//               </form>
+
+//               <div className="mt-8">
+//                 <h3 className="text-lg font-medium mb-4">On The Web</h3>
+//                 <div className="space-y-4">
+//                   <div className="flex items-center">
+//                     <div className="w-12 h-12 bg-blue-600 rounded-md flex items-center justify-center mr-4">
+//                       <i className="fab fa-linkedin-in text-white"></i>
+//                     </div>
+//                     <span className="mr-4">LinkedIn</span>
+//                     <input type="text" placeholder="Enter username" className="flex-1 bg-[#232b3a] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+//                     <button className="ml-4 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md">Submit</button>
+//                   </div>
+
+//                   <div className="flex items-center">
+//                     <div className="w-12 h-12 bg-blue-600 rounded-md flex items-center justify-center mr-4">
+//                       <i className="fab fa-facebook-f text-white"></i>
+//                     </div>
+//                     <span className="mr-4">Facebook</span>
+//                     <input type="text" placeholder="Enter username" className="flex-1 bg-[#232b3a] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+//                     <button className="ml-4 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md">Submit</button>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </main>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default Profile;
+
+
+
+
+
+
+import React, { useState } from "react";
+import Navbar from "./Navbar";
+
+export default function Services() {
+ const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  
+  // 100+ services with categorized data
+  const serviceCategories = {
+    design: [
+      { id: 1, title: "Logo Design", price: 30, img: "https://source.unsplash.com/featured/?logo,design", rating: 4.8, reviews: 88, desc: "Professional logo design with multiple concepts" },
+      { id: 2, title: "Business Card Design", price: 25, img: "https://source.unsplash.com/featured/?business,card", rating: 4.7, reviews: 45, desc: "Elegant business card designs" },
+      { id: 3, title: "Brochure Design", price: 50, img: "https://source.unsplash.com/featured/?brochure,design", rating: 4.6, reviews: 32, desc: "Professional brochure layouts" },
+      { id: 4, title: "Poster Design", price: 35, img: "https://source.unsplash.com/featured/?poster,design", rating: 4.5, reviews: 67, desc: "Eye-catching poster designs" },
+      { id: 5, title: "Flyer Design", price: 20, img: "https://source.unsplash.com/featured/?flyer,design", rating: 4.4, reviews: 89, desc: "Marketing flyer designs" },
+      { id: 6, title: "Book Cover Design", price: 60, img: "https://source.unsplash.com/featured/?book,cover", rating: 4.9, reviews: 23, desc: "Captivating book cover designs" },
+      { id: 7, title: "Packaging Design", price: 75, img: "https://source.unsplash.com/featured/?packaging,design", rating: 4.7, reviews: 41, desc: "Product packaging solutions" },
+      { id: 8, title: "T-Shirt Design", price: 25, img: "https://source.unsplash.com/featured/?tshirt,design", rating: 4.6, reviews: 56, desc: "Custom t-shirt graphics" },
+      { id: 9, title: "Social Media Kit", price: 45, img: "https://source.unsplash.com/featured/?social,media", rating: 4.8, reviews: 78, desc: "Complete social media graphics" },
+      { id: 10, title: "Infographic Design", price: 55, img: "https://source.unsplash.com/featured/?infographic,design", rating: 4.5, reviews: 34, desc: "Data visualization graphics" }
+    ],
+    digital: [
+      { id: 11, title: "Website Design", price: 400, img: "https://source.unsplash.com/featured/?website,design", rating: 4.9, reviews: 14, desc: "Responsive website design" },
+      { id: 12, title: "WordPress Development", price: 300, img: "https://source.unsplash.com/featured/?wordpress,development", rating: 4.8, reviews: 56, desc: "Custom WordPress sites" },
+      { id: 13, title: "E-commerce Store", price: 600, img: "https://source.unsplash.com/featured/?ecommerce,store", rating: 4.7, reviews: 42, desc: "Online store development" },
+      { id: 14, title: "Mobile App Design", price: 500, img: "https://source.unsplash.com/featured/?mobile,app", rating: 4.6, reviews: 38, desc: "UI/UX app design" },
+      { id: 15, title: "Landing Page", price: 150, img: "https://source.unsplash.com/featured/?landing,page", rating: 4.5, reviews: 67, desc: "High-converting landing pages" },
+      { id: 16, title: "Email Template", price: 40, img: "https://source.unsplash.com/featured/?email,template", rating: 4.4, reviews: 29, desc: "Responsive email templates" },
+      { id: 17, title: "Web App Development", price: 800, img: "https://source.unsplash.com/featured/?web,app", rating: 4.9, reviews: 19, desc: "Custom web applications" },
+      { id: 18, title: "API Integration", price: 200, img: "https://source.unsplash.com/featured/?api,integration", rating: 4.7, reviews: 31, desc: "Third-party API integration" },
+      { id: 19, title: "Database Design", price: 180, img: "https://source.unsplash.com/featured/?database,design", rating: 4.6, reviews: 22, desc: "Database architecture" },
+      { id: 20, title: "Cloud Setup", price: 120, img: "https://source.unsplash.com/featured/?cloud,setup", rating: 4.5, reviews: 45, desc: "Cloud infrastructure setup" }
+    ],
+    marketing: [
+      { id: 21, title: "SEO Optimization", price: 120, img: "https://source.unsplash.com/featured/?seo,optimization", rating: 4.5, reviews: 18, desc: "Search engine optimization" },
+      { id: 22, title: "Social Media Marketing", price: 80, img: "https://source.unsplash.com/featured/?social,media,marketing", rating: 4.6, reviews: 73, desc: "Social media campaign management" },
+      { id: 23, title: "Content Writing", price: 25, img: "https://source.unsplash.com/featured/?content,writing", rating: 4.7, reviews: 89, desc: "Professional content creation" },
+      { id: 24, title: "Google Ads Management", price: 100, img: "https://source.unsplash.com/featured/?google,ads", rating: 4.4, reviews: 52, desc: "PPC campaign management" },
+      { id: 25, title: "Email Marketing", price: 60, img: "https://source.unsplash.com/featured/?email,marketing", rating: 4.5, reviews: 41, desc: "Email campaign setup" },
+      { id: 26, title: "Marketing Strategy", price: 150, img: "https://source.unsplash.com/featured/?marketing,strategy", rating: 4.8, reviews: 27, desc: "Comprehensive marketing plan" },
+      { id: 27, title: "Influencer Marketing", price: 200, img: "https://source.unsplash.com/featured/?influencer,marketing", rating: 4.3, reviews: 34, desc: "Influencer collaboration" },
+      { id: 28, title: "Video Marketing", price: 90, img: "https://source.unsplash.com/featured/?video,marketing", rating: 4.6, reviews: 28, desc: "Promotional video creation" },
+      { id: 29, title: "Brand Strategy", price: 180, img: "https://source.unsplash.com/featured/?brand,strategy", rating: 4.7, reviews: 19, desc: "Brand development plan" },
+      { id: 30, title: "Market Research", price: 70, img: "https://source.unsplash.com/featured/?market,research", rating: 4.5, reviews: 36, desc: "Industry analysis" }
+    ],
+    video: [
+      { id: 31, title: "Video Editing", price: 60, img: "https://source.unsplash.com/featured/?video,editing", rating: 4.8, reviews: 41, desc: "Professional video editing" },
+      { id: 32, title: "Motion Graphics", price: 85, img: "https://source.unsplash.com/featured/?motion,graphics", rating: 4.7, reviews: 33, desc: "Animated graphics creation" },
+      { id: 33, title: "YouTube Intro", price: 40, img: "https://source.unsplash.com/featured/?youtube,intro", rating: 4.6, reviews: 67, desc: "Custom YouTube introductions" },
+      { id: 34, title: "Explainer Video", price: 120, img: "https://source.unsplash.com/featured/?explainer,video", rating: 4.5, reviews: 42, desc: "Animated explainer videos" },
+      { id: 35, title: "Video Ads", price: 75, img: "https://source.unsplash.com/featured/?video,ads", rating: 4.4, reviews: 38, desc: "Commercial video advertisements" },
+      { id: 36, title: "Video Restoration", price: 50, img: "https://source.unsplash.com/featured/?video,restoration", rating: 4.9, reviews: 24, desc: "Old video enhancement" },
+      { id: 37, title: "Color Grading", price: 45, img: "https://source.unsplash.com/featured/?color,grading", rating: 4.7, reviews: 29, desc: "Professional color correction" },
+      { id: 38, title: "Audio Enhancement", price: 30, img: "https://source.unsplash.com/featured/?audio,enhancement", rating: 4.6, reviews: 51, desc: "Sound quality improvement" },
+      { id: 39, title: "Subtitles/Captions", price: 20, img: "https://source.unsplash.com/featured/?subtitles,captions", rating: 4.5, reviews: 73, desc: "Video captioning services" },
+      { id: 40, title: "Video Compression", price: 15, img: "https://source.unsplash.com/featured/?video,compression", rating: 4.4, reviews: 46, desc: "File size optimization" }
+    ],
+    writing: [
+      { id: 41, title: "Blog Writing", price: 20, img: "/images/Blog-Writing.PNG", rating: 4.7, reviews: 94, desc: "Engaging blog content" },
+      { id: 42, title: "Article Writing", price: 25, img: "https://source.unsplash.com/featured/?article,writing", rating: 4.6, reviews: 78, desc: "Well-researched articles" },
+      { id: 43, title: "Copywriting", price: 35, img: "https://source.unsplash.com/featured/?copywriting", rating: 4.8, reviews: 63, desc: "Persuasive sales copy" },
+      { id: 44, title: "Technical Writing", price: 45, img: "https://source.unsplash.com/featured/?technical,writing", rating: 4.5, reviews: 42, desc: "Technical documentation" },
+      { id: 45, title: "Script Writing", price: 50, img: "https://source.unsplash.com/featured/?script,writing", rating: 4.4, reviews: 37, desc: "Video and audio scripts" },
+      { id: 46, title: "Proofreading", price: 15, img: "https://source.unsplash.com/featured/?proofreading", rating: 4.9, reviews: 89, desc: "Error correction service" },
+      { id: 47, title: "Translation", price: 30, img: "https://source.unsplash.com/featured/?translation", rating: 4.7, reviews: 56, desc: "Multi-language translation" },
+      { id: 48, title: "Resume Writing", price: 40, img: "https://source.unsplash.com/featured/?resume,writing", rating: 4.6, reviews: 71, desc: "Professional resume creation" },
+      { id: 49, title: "Ebook Writing", price: 200, img: "https://source.unsplash.com/featured/?ebook,writing", rating: 4.5, reviews: 28, desc: "Complete ebook development" },
+      { id: 50, title: "Product Descriptions", price: 18, img: "https://source.unsplash.com/featured/?product,descriptions", rating: 4.4, reviews: 65, desc: "Compelling product text" }
+    ],
+    business: [
+      { id: 51, title: "Business Plan", price: 150, img: "https://source.unsplash.com/featured/?business,plan", rating: 4.8, reviews: 34, desc: "Comprehensive business planning" },
+      { id: 52, title: "Financial Analysis", price: 120, img: "https://source.unsplash.com/featured/?financial,analysis", rating: 4.7, reviews: 27, desc: "Financial performance review" },
+      { id: 53, title: "Market Analysis", price: 100, img: "https://source.unsplash.com/featured/?market,analysis", rating: 4.6, reviews: 41, desc: "Industry market research" },
+      { id: 54, title: "Legal Consultation", price: 80, img: "https://source.unsplash.com/featured/?legal,consultation", rating: 4.5, reviews: 23, desc: "Business legal advice" },
+      { id: 55, title: "Tax Preparation", price: 60, img: "https://source.unsplash.com/featured/?tax,preparation", rating: 4.4, reviews: 58, desc: "Tax filing service" },
+      { id: 56, title: "Virtual Assistant", price: 25, img: "https://source.unsplash.com/featured/?virtual,assistant", rating: 4.3, reviews: 72, desc: "Administrative support" },
+      { id: 57, title: "Data Entry", price: 15, img: "https://source.unsplash.com/featured/?data,entry", rating: 4.2, reviews: 89, desc: "Accurate data processing" },
+      { id: 58, title: "CRM Setup", price: 90, img: "https://source.unsplash.com/featured/?crm,setup", rating: 4.7, reviews: 31, desc: "Customer relationship management" },
+      { id: 59, title: "Project Management", price: 70, img: "https://source.unsplash.com/featured/?project,management", rating: 4.6, reviews: 44, desc: "Project coordination" },
+      { id: 60, title: "Business Consulting", price: 110, img: "https://source.unsplash.com/featured/?business,consulting", rating: 4.5, reviews: 39, desc: "Strategic business advice" }
+    ],
+    ai: [
+      { id: 61, title: "AI Image Generation", price: 10, img: "https://source.unsplash.com/featured/?ai,image", rating: 4.4, reviews: 9, desc: "Custom AI-generated images" },
+      { id: 62, title: "AI Video Creation", price: 100, img: "https://source.unsplash.com/featured/?ai,video", rating: 4.3, reviews: 12, desc: "AI-powered video production" },
+      { id: 63, title: "Chatbot Development", price: 200, img: "https://source.unsplash.com/featured/?chatbot,development", rating: 4.6, reviews: 25, desc: "AI chatbot implementation" },
+      { id: 64, title: "Machine Learning", price: 300, img: "https://source.unsplash.com/featured/?machine,learning", rating: 4.7, reviews: 18, desc: "ML model development" },
+      { id: 65, title: "Data Analysis", price: 80, img: "https://source.unsplash.com/featured/?data,analysis", rating: 4.5, reviews: 33, desc: "AI-powered data insights" },
+      { id: 66, title: "AI Content Writing", price: 25, img: "https://source.unsplash.com/featured/?ai,writing", rating: 4.4, reviews: 47, desc: "AI-assisted content creation" },
+      { id: 67, title: "Voice Synthesis", price: 45, img: "https://source.unsplash.com/featured/?voice,synthesis", rating: 4.3, reviews: 21, desc: "AI voice generation" },
+      { id: 68, title: "Predictive Analytics", price: 120, img: "https://source.unsplash.com/featured/?predictive,analytics", rating: 4.8, reviews: 14, desc: "Future trend forecasting" },
+      { id: 69, title: "AI Optimization", price: 90, img: "https://source.unsplash.com/featured/?ai,optimization", rating: 4.6, reviews: 29, desc: "Process automation" },
+      { id: 70, title: "Neural Networks", price: 250, img: "https://source.unsplash.com/featured/?neural,networks", rating: 4.9, reviews: 11, desc: "Advanced AI solutions" }
+    ],
+    music: [
+      { id: 71, title: "Music Production", price: 150, img: "https://source.unsplash.com/featured/?music,production", rating: 4.7, reviews: 36, desc: "Professional music creation" },
+      { id: 72, title: "Audio Mixing", price: 60, img: "https://source.unsplash.com/featured/?audio,mixing", rating: 4.6, reviews: 42, desc: "Sound mixing and mastering" },
+      { id: 73, title: "Jingle Creation", price: 80, img: "https://source.unsplash.com/featured/?jingle,creation", rating: 4.5, reviews: 28, desc: "Custom advertising jingles" },
+      { id: 74, title: "Sound Design", price: 70, img: "https://source.unsplash.com/featured/?sound,design", rating: 4.4, reviews: 33, desc: "Custom sound effects" },
+      { id: 75, title: "Voice Over", price: 40, img: "https://source.unsplash.com/featured/?voice,over", rating: 4.8, reviews: 57, desc: "Professional voice recording" },
+      { id: 76, title: "Podcast Editing", price: 55, img: "https://source.unsplash.com/featured/?podcast,editing", rating: 4.7, reviews: 39, desc: "Podcast production" },
+      { id: 77, title: "Audio Restoration", price: 35, img: "https://source.unsplash.com/featured/?audio,restoration", rating: 4.6, reviews: 24, desc: "Audio quality enhancement" },
+      { id: 78, title: "Music Licensing", price: 100, img: "https://source.unsplash.com/featured/?music,licensing", rating: 4.5, reviews: 19, desc: "Royalty-free music" },
+      { id: 79, title: "Audio Book Production", price: 120, img: "https://source.unsplash.com/featured/?audiobook,production", rating: 4.4, reviews: 26, desc: "Complete audiobook creation" },
+      { id: 80, title: "Beat Making", price: 50, img: "https://source.unsplash.com/featured/?beat,making", rating: 4.3, reviews: 48, desc: "Custom music beats" }
+    ],
+    photography: [
+      { id: 81, title: "Product Photography", price: 45, img: "https://source.unsplash.com/featured/?product,photography", rating: 4.8, reviews: 63, desc: "Professional product shots" },
+      { id: 82, title: "Photo Editing", price: 20, img: "https://source.unsplash.com/featured/?photo,editing", rating: 4.7, reviews: 78, desc: "Image enhancement" },
+      { id: 83, title: "Portrait Photography", price: 60, img: "https://source.unsplash.com/featured/?portrait,photography", rating: 4.6, reviews: 42, desc: "Professional portraits" },
+      { id: 84, title: "Real Estate Photos", price: 75, img: "https://source.unsplash.com/featured/?real,estate,photos", rating: 4.5, reviews: 37, desc: "Property photography" },
+      { id: 85, title: "Food Photography", price: 55, img: "https://source.unsplash.com/featured/?food,photography", rating: 4.4, reviews: 51, desc: "Culinary photography" },
+      { id: 86, title: "Photo Restoration", price: 30, img: "https://source.unsplash.com/featured/?photo,restoration", rating: 4.9, reviews: 29, desc: "Old photo repair" },
+      { id: 87, title: "Drone Photography", price: 90, img: "https://source.unsplash.com/featured/?drone,photography", rating: 4.7, reviews: 34, desc: "Aerial photography" },
+      { id: 88, title: "Event Photography", price: 100, img: "https://source.unsplash.com/featured/?event,photography", rating: 4.6, reviews: 45, desc: "Event coverage" },
+      { id: 89, title: "Fashion Photography", price: 80, img: "https://source.unsplash.com/featured/?fashion,photography", rating: 4.5, reviews: 38, desc: "Fashion shoot" },
+      { id: 90, title: "360° Photography", price: 120, img: "https://source.unsplash.com/featured/?360,photography", rating: 4.4, reviews: 22, desc: "Immersive photography" }
+    ],
+    consulting: [
+      { id: 91, title: "Career Coaching", price: 65, img: "https://source.unsplash.com/featured/?career,coaching", rating: 4.8, reviews: 41, desc: "Professional career guidance" },
+      { id: 92, title: "Life Coaching", price: 55, img: "https://source.unsplash.com/featured/?life,coaching", rating: 4.7, reviews: 36, desc: "Personal development" },
+      { id: 93, title: "Health Coaching", price: 70, img: "https://source.unsplash.com/featured/?health,coaching", rating: 4.6, reviews: 29, desc: "Wellness guidance" },
+      { id: 94, title: "Financial Advice", price: 85, img: "https://source.unsplash.com/featured/?financial,advice", rating: 4.5, reviews: 33, desc: "Financial planning" },
+      { id: 95, title: "Relationship Coaching", price: 60, img: "https://source.unsplash.com/featured/?relationship,coaching", rating: 4.4, reviews: 27, desc: "Relationship guidance" },
+      { id: 96, title: "Business Coaching", price: 95, img: "https://source.unsplash.com/featured/?business,coaching", rating: 4.3, reviews: 31, desc: "Business mentorship" },
+      { id: 97, title: "Nutrition Planning", price: 45, img: "https://source.unsplash.com/featured/?nutrition,planning", rating: 4.7, reviews: 44, desc: "Dietary guidance" },
+      { id: 98, title: "Fitness Training", price: 50, img: "https://source.unsplash.com/featured/?fitness,training", rating: 4.6, reviews: 52, desc: "Exercise programs" },
+      { id: 99, title: "Meditation Guidance", price: 35, img: "https://source.unsplash.com/featured/?meditation,guidance", rating: 4.5, reviews: 38, desc: "Mindfulness training" },
+      { id: 100, title: "Time Management", price: 40, img: "https://source.unsplash.com/featured/?time,management", rating: 4.4, reviews: 46, desc: "Productivity coaching" }
+    ],
+    education: [
+      { id: 101, title: "Tutoring", price: 30, img: "https://source.unsplash.com/featured/?tutoring", rating: 4.8, reviews: 67, desc: "Academic tutoring" },
+      { id: 102, title: "Online Course", price: 150, img: "https://source.unsplash.com/featured/?online,course", rating: 4.7, reviews: 42, desc: "Course development" },
+      { id: 103, title: "Language Lessons", price: 25, img: "https://source.unsplash.com/featured/?language,lessons", rating: 4.6, reviews: 58, desc: "Language instruction" },
+      { id: 104, title: "Test Preparation", price: 45, img: "https://source.unsplash.com/featured/?test,preparation", rating: 4.5, reviews: 39, desc: "Exam preparation" },
+      { id: 105, title: "Homework Help", price: 20, img: "https://source.unsplash.com/featured/?homework,help", rating: 4.4, reviews: 73, desc: "Academic assistance" },
+      { id: 106, title: "Research Assistance", price: 35, img: "https://source.unsplash.com/featured/?research,assistance", rating: 4.3, reviews: 28, desc: "Research support" },
+      { id: 107, title: "Study Materials", price: 15, img: "https://source.unsplash.com/featured/?study,materials", rating: 4.7, reviews: 51, desc: "Educational resources" },
+      { id: 108, title: "Workshop Development", price: 80, img: "https://source.unsplash.com/featured/?workshop,development", rating: 4.6, reviews: 34, desc: "Training workshops" },
+      { id: 109, title: "Curriculum Design", price: 120, img: "https://source.unsplash.com/featured/?curriculum,design", rating: 4.5, reviews: 26, desc: "Educational planning" },
+      { id: 110, title: "Skill Assessment", price: 40, img: "https://source.unsplash.com/featured/?skill,assessment", rating: 4.4, reviews: 32, desc: "Competency evaluation" }
+    ]
+  };
+
+  // Flatten all services for search
+  const allServices = Object.values(serviceCategories).flat();
+
+  // Enhanced payment methods
+  const paymentMethods = [
+    { id: "card", name: "Credit/Debit Card", icon: "💳" },
+    { id: "paypal", name: "PayPal", icon: "🔵" },
+    { id: "bank", name: "Bank Transfer", icon: "🏦" },
+    { id: "crypto", name: "Cryptocurrency", icon: "₿" },
+    { id: "applepay", name: "Apple Pay", icon: "🍎" },
+    { id: "googlepay", name: "Google Pay", icon: "📱" },
+    { id: "alipay", name: "Alipay", icon: "💰" },
+    { id: "wechatpay", name: "WeChat Pay", icon: "💬" }
+  ];
+
+  // 100+ currency options
+  const currencies = [
+    { code: "USD", symbol: "$", name: "US Dollar", rate: 1 },
+    { code: "EUR", symbol: "€", name: "Euro", rate: 0.85 },
+    { code: "GBP", symbol: "£", name: "British Pound", rate: 0.73 },
+    { code: "JPY", symbol: "¥", name: "Japanese Yen", rate: 110 },
+    { code: "CAD", symbol: "C$", name: "Canadian Dollar", rate: 1.25 },
+    { code: "AUD", symbol: "A$", name: "Australian Dollar", rate: 1.35 },
+    { code: "CHF", symbol: "CHF", name: "Swiss Franc", rate: 0.92 },
+    { code: "CNY", symbol: "¥", name: "Chinese Yuan", rate: 6.45 },
+    { code: "INR", symbol: "₹", name: "Indian Rupee", rate: 74 },
+    { code: "RUB", symbol: "₽", name: "Russian Ruble", rate: 73 },
+    // Add more currencies as needed...
+  ];
+
+  // Country options
+  const countries = [
+    { code: "US", name: "United States", flag: "🇺🇸" },
+    { code: "GB", name: "United Kingdom", flag: "🇬🇧" },
+    { code: "CA", name: "Canada", flag: "🇨🇦" },
+    { code: "AU", name: "Australia", flag: "🇦🇺" },
+    { code: "DE", name: "Germany", flag: "🇩🇪" },
+    { code: "FR", name: "France", flag: "🇫🇷" },
+    { code: "JP", name: "Japan", flag: "🇯🇵" },
+    { code: "CN", name: "China", flag: "🇨🇳" },
+    { code: "IN", name: "India", flag: "🇮🇳" },
+    { code: "BR", name: "Brazil", flag: "🇧🇷" },
+    // Add more countries as needed...
+  ];
+
+  const [services] = useState(allServices);
+  const [query, setQuery] = useState("");
+  const [minRating, setMinRating] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(1000);
+  const [cart, setCart] = useState([]);
+  const [selectedService, setSelectedService] = useState(null);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [selectedCurrency, setSelectedCurrency] = useState("USD");
+  const [selectedCountry, setSelectedCountry] = useState("US");
+  const [reviews, setReviews] = useState({});
+  const [sortBy, setSortBy] = useState("popular");
+
+  function handleSearchChange(e) {
+    setQuery(e.target.value);
+  }
+
+  function filteredServices() {
+    const q = query.trim().toLowerCase();
+    let filtered = services.filter(s => {
+      const matchesQuery = q === "" || 
+        s.title.toLowerCase().includes(q) || 
+        s.desc.toLowerCase().includes(q) ||
+        Object.keys(serviceCategories).some(cat => 
+          cat.includes(q) && serviceCategories[cat].includes(s)
+        );
+      
+      const matchesRating = s.rating >= minRating;
+      const matchesPrice = s.price <= maxPrice;
+      const matchesCategory = selectedCategory === "all" || 
+        Object.keys(serviceCategories).some(cat => 
+          cat === selectedCategory && serviceCategories[cat].includes(s)
+        );
+      
+      return matchesQuery && matchesRating && matchesPrice && matchesCategory;
+    });
+
+    // Sorting
+    switch (sortBy) {
+      case "price-low":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "price-high":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case "rating":
+        filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      case "popular":
+        filtered.sort((a, b) => b.reviews - a.reviews);
+        break;
+      default:
+        break;
+    }
+
+    return filtered;
+  }
+
+  function convertPrice(price, fromCurrency = "USD", toCurrency) {
+    const fromRate = currencies.find(c => c.code === fromCurrency)?.rate || 1;
+    const toRate = currencies.find(c => c.code === toCurrency)?.rate || 1;
+    return (price * toRate / fromRate).toFixed(2);
+  }
+
+  function getCurrencySymbol() {
+    return currencies.find(c => c.code === selectedCurrency)?.symbol || "$";
+  }
+
+  function addToCart(service) {
+    setCart(prev => [...prev, service]);
+    alert(`${service.title} added to order`);
+  }
+
+  function removeFromCart(index) {
+    setCart(prev => prev.filter((_, i) => i !== index));
+  }
+
+  function placeOrder() {
+    if (cart.length === 0) {
+      alert("Please add at least one service to place an order.");
+      return;
+    }
+    setShowCheckout(true);
+  }
+
+  function confirmPayment() {
+    const orderSummary = cart.map(s => s.title).join(", ");
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    const convertedTotal = convertPrice(total, "USD", selectedCurrency);
+    
+    alert(`Payment via ${paymentMethod} confirmed. Order: ${orderSummary}\nTotal: ${getCurrencySymbol()}${convertedTotal}`);
+    setCart([]);
+    setShowCheckout(false);
+  }
+
+  function openServiceDetail(service) {
+    setSelectedService(service);
+  }
+
+  function leaveReview(serviceId, name, rating, text) {
+    setReviews(prev => {
+      const list = prev[serviceId] ? [...prev[serviceId]] : [];
+      list.unshift({ name, rating, text, date: new Date().toISOString() });
+      return { ...prev, [serviceId]: list };
+    });
+  }
+
+  function renderStars(rating) {
+    if (!rating || rating <= 0) return <span className="text-sm text-slate-400">No ratings</span>;
+    const full = Math.floor(rating);
+    const half = rating - full >= 0.5;
+    const stars = [];
+    for (let i = 0; i < full; i++) stars.push('★');
+    if (half) stars.push('☆');
+    while (stars.length < 5) stars.push('☆');
+    return <span className="text-yellow-500">{stars.join('')}</span>;
+  }
+
+  return (
+    <>
+      <Navbar />
+
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 text-slate-900 pt-20 p-6">
+       
+        <header className="max-w-7xl mx-auto mb-8">
+          
+          <div className="text-center mb-8">
+        
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              Professional Services Marketplace
+            </h1>
+            <p className="mt-3 text-lg text-slate-600">Discover 100+ professional services with secure payments and global support</p>
+          </div>
+
+          {/* Enhanced Search and Filters */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg mb-6">
+            <div className="grid md:grid-cols-4 gap-4 mb-4">
+              <div className="relative">
+                <input
+                  value={query}
+                  onChange={handleSearchChange}
+                  placeholder="Search services, keywords, categories..."
+                  className="w-full p-3 pr-10 rounded-lg border border-gray-200 shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1">
+                  🔍
+                </button>
+              </div>
+
+              <select 
+                value={selectedCategory} 
+                onChange={e => setSelectedCategory(e.target.value)}
+                className="p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500"
+              >
+                <option value="all">All Categories</option>
+                {Object.keys(serviceCategories).map(cat => (
+                  <option key={cat} value={cat}>
+                    {cat.charAt(0).toUpperCase() + cat.slice(1)} ({serviceCategories[cat].length})
+                  </option>
+                ))}
+              </select>
+
+              <select 
+                value={sortBy} 
+                onChange={e => setSortBy(e.target.value)}
+                className="p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500"
+              >
+                <option value="popular">Most Popular</option>
+                <option value="rating">Highest Rated</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+              </select>
+
+              <div className="flex gap-2">
+                <select 
+                  value={selectedCurrency}
+                  onChange={e => setSelectedCurrency(e.target.value)}
+                  className="flex-1 p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500"
+                >
+                  {currencies.map(currency => (
+                    <option key={currency.code} value={currency.code}>
+                      {currency.code} ({currency.symbol})
+                    </option>
+                  ))}
+                </select>
+
+                <select 
+                  value={selectedCountry}
+                  onChange={e => setSelectedCountry(e.target.value)}
+                  className="flex-1 p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500"
+                >
+                  {countries.map(country => (
+                    <option key={country.code} value={country.code}>
+                      {country.flag} {country.code}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Minimum Rating: {minRating}+</label>
+                <input 
+                  type="range" 
+                  min="0" 
+                  max="5" 
+                  step="0.5"
+                  value={minRating} 
+                  onChange={e => setMinRating(parseFloat(e.target.value))}
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Max Price: {getCurrencySymbol()}{convertPrice(maxPrice, "USD", selectedCurrency)}</label>
+                <input 
+                  type="range" 
+                  min="0" 
+                  max="1000" 
+                  step="10"
+                  value={maxPrice} 
+                  onChange={e => setMaxPrice(parseInt(e.target.value))}
+                  className="w-full"
+                />
+              </div>
+
+              <div className="flex items-center justify-end">
+                <span className="text-sm text-gray-600">
+                  Showing {filteredServices().length} of {services.length} services
+                </span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main className="max-w-7xl mx-auto grid lg:grid-cols-4 gap-8">
+          {/* Services Grid */}
+          <section className="lg:col-span-3">
+            {/* Category Tabs */}
+            <div className="flex overflow-x-auto gap-2 mb-6 pb-2">
+              {["all", ...Object.keys(serviceCategories)].map(category => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-full whitespace-nowrap transition-all ${
+                    selectedCategory === category
+                      ? "bg-purple-600 text-white shadow-lg"
+                      : "bg-white text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  {category === "all" ? "All Services" : category.charAt(0).toUpperCase() + category.slice(1)}
+                  {category !== "all" && ` (${serviceCategories[category].length})`}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              {filteredServices().map(service => (
+                <article key={service.id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-4 hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                  <div className="relative">
+                    <img 
+                      src={service.img} 
+                      alt={service.title} 
+                      className="h-48 w-full object-cover rounded-xl mb-4"
+                    />
+                    <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-sm">
+                      {getCurrencySymbol()}{convertPrice(service.price, "USD", selectedCurrency)}
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-lg font-semibold text-gray-900">{service.title}</h3>
+                    <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">
+                      {Object.keys(serviceCategories).find(cat => 
+                        serviceCategories[cat].includes(service)
+                      )}
+                    </span>
+                  </div>
+                  
+                  <p className="text-sm text-gray-600 mb-3">{service.desc}</p>
+                  
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-1">
+                      {renderStars(service.rating)}
+                      <span className="text-sm text-gray-500 ml-1">({service.reviews})</span>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => openServiceDetail(service)}
+                        className="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                      >
+                        Details
+                      </button>
+                      <button 
+                        onClick={() => addToCart(service)}
+                        className="px-3 py-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
+                      >
+                        Order
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          {/* Enhanced Sidebar */}
+          <aside className="lg:col-span-1 space-y-6 sticky top-6 h-fit">
+            {/* Shopping Cart */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                🛒 Your Order
+                {cart.length > 0 && (
+                  <span className="bg-red-500 text-white text-sm px-2 py-1 rounded-full">
+                    {cart.length}
+                  </span>
+                )}
+              </h3>
+              
+              <div className="space-y-3 max-h-64 overflow-auto">
+                {cart.length === 0 ? (
+                  <div className="text-center text-gray-500 py-4">
+                    Your cart is empty
+                  </div>
+                ) : (
+                  cart.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                      <div className="flex-1">
+                        <div className="font-medium text-sm">{item.title}</div>
+                        <div className="text-xs text-gray-500">
+                          {getCurrencySymbol()}{convertPrice(item.price, "USD", selectedCurrency)}
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => removeFromCart(index)}
+                        className="text-red-500 hover:text-red-700 transition-colors"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {cart.length > 0 && (
+                <div className="border-t pt-4 mt-4">
+                  <div className="flex justify-between text-lg font-semibold mb-4">
+                    <span>Total:</span>
+                    <span>
+                      {getCurrencySymbol()}
+                      {convertPrice(
+                        cart.reduce((sum, item) => sum + item.price, 0),
+                        "USD",
+                        selectedCurrency
+                      )}
+                    </span>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Payment Method</label>
+                      <select 
+                        value={paymentMethod}
+                        onChange={e => setPaymentMethod(e.target.value)}
+                        className="w-full p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500"
+                      >
+                        {paymentMethods.map(method => (
+                          <option key={method.id} value={method.id}>
+                            {method.icon} {method.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <button 
+                      onClick={placeOrder}
+                      className="w-full bg-gradient-to-r from-green-500 to-teal-600 text-white py-3 rounded-lg hover:from-green-600 hover:to-teal-700 transition-all font-semibold"
+                    >
+                      💳 Place Order
+                    </button>
+                    
+                    <button 
+                      onClick={() => setCart([])}
+                      className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      Clear Cart
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Payment Methods */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+              <h4 className="font-semibold mb-3">💳 Accepted Payments</h4>
+              <div className="grid grid-cols-4 gap-3">
+                {paymentMethods.map(method => (
+                  <div key={method.id} className="text-center p-2 bg-gray-50 rounded-lg">
+                    <div className="text-2xl mb-1">{method.icon}</div>
+                    <div className="text-xs text-gray-600">{method.name}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl p-6 shadow-lg">
+              <h4 className="font-semibold mb-3">📊 Marketplace Stats</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Total Services:</span>
+                  <span className="font-semibold">110+</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Categories:</span>
+                  <span className="font-semibold">10</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Countries:</span>
+                  <span className="font-semibold">50+</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Currencies:</span>
+                  <span className="font-semibold">100+</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </main>
+
+        {/* Enhanced Checkout Modal */}
+        {showCheckout && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+              <h3 className="text-xl font-semibold mb-4">Secure Checkout</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2">Order Summary</h4>
+                  <div className="space-y-2 max-h-40 overflow-auto">
+                    {cart.map((item, index) => (
+                      <div key={index} className="flex justify-between text-sm">
+                        <span>{item.title}</span>
+                        <span>{getCurrencySymbol()}{convertPrice(item.price, "USD", selectedCurrency)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border-t pt-4">
+                  <div className="flex justify-between font-semibold">
+                    <span>Total:</span>
+                    <span>
+                      {getCurrencySymbol()}
+                      {convertPrice(
+                        cart.reduce((sum, item) => sum + item.price, 0),
+                        "USD",
+                        selectedCurrency
+                      )}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Payment Method</label>
+                    <select 
+                      value={paymentMethod}
+                      onChange={e => setPaymentMethod(e.target.value)}
+                      className="w-full p-2 border rounded-lg"
+                    >
+                      {paymentMethods.map(method => (
+                        <option key={method.id} value={method.id}>
+                          {method.icon} {method.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => setShowCheckout(false)}
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={confirmPayment}
+                      className="flex-1 px-4 py-2 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg hover:from-green-600 hover:to-teal-700 transition-all font-semibold"
+                    >
+                      Confirm Payment
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Service Detail Modal */}
+        {selectedService && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-2xl font-semibold">{selectedService.title}</h2>
+                <button 
+                  onClick={() => setSelectedService(null)}
+                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <img 
+                  src={selectedService.img} 
+                  alt={selectedService.title}
+                  className="w-full h-64 object-cover rounded-xl"
+                />
+                
+                <div>
+                  <p className="text-gray-600 mb-4">{selectedService.desc}</p>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between">
+                      <span className="font-medium">Price:</span>
+                      <span className="text-lg font-semibold">
+                        {getCurrencySymbol()}
+                        {convertPrice(selectedService.price, "USD", selectedCurrency)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Rating:</span>
+                      <span className="flex items-center gap-1">
+                        {renderStars(selectedService.rating)} ({selectedService.reviews} reviews)
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Category:</span>
+                      <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm">
+                        {Object.keys(serviceCategories).find(cat => 
+                          serviceCategories[cat].includes(selectedService)
+                        )}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={() => {
+                      addToCart(selectedService);
+                      setSelectedService(null);
+                    }}
+                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all font-semibold mb-4"
+                  >
+                    Add to Cart - {getCurrencySymbol()}
+                    {convertPrice(selectedService.price, "USD", selectedCurrency)}
+                  </button>
+                </div>
+              </div>
+
+              {/* Reviews Section */}
+              <div className="mt-6">
+                <h4 className="font-semibold mb-4">Customer Reviews</h4>
+                <ReviewForm 
+                  onSubmit={(name, rating, text) => {
+                    leaveReview(selectedService.id, name, rating, text);
+                  }} 
+                />
+                
+                <div className="mt-4 space-y-3">
+                  {(reviews[selectedService.id] || []).map((review, index) => (
+                    <div key={index} className="p-4 bg-gray-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="font-medium">{review.name}</span>
+                        <span className="text-yellow-500">{'★'.repeat(review.rating)}</span>
+                      </div>
+                      <p className="text-gray-700">{review.text}</p>
+                      <div className="text-xs text-gray-500 mt-2">
+                        {new Date(review.date).toLocaleDateString()}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <footer className="max-w-7xl mx-auto mt-12 text-center text-sm text-gray-600">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+            <p>© {new Date().getFullYear()} MDK Agency — Professional Services Marketplace</p>
+            <div className="flex justify-center gap-6 mt-2">
+              <a href="#" className="hover:text-purple-600 transition-colors">Terms</a>
+              <a href="#" className="hover:text-purple-600 transition-colors">Privacy</a>
+              <a href="#" className="hover:text-purple-600 transition-colors">Contact</a>
+              <a href="#" className="hover:text-purple-600 transition-colors">Support</a>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </>
+  );
+}
+
+// ReviewForm Component
+function ReviewForm({ onSubmit }) {
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(5);
+  const [text, setText] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!name || !text) {
+      alert('Please add your name and review text');
+      return;
+    }
+    onSubmit(name, rating, text);
+    setName(''); setRating(5); setText('');
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-gray-50 p-4 rounded-lg">
+      <h5 className="font-medium mb-3">Write a Review</h5>
+      <div className="space-y-3">
+        <input 
+          value={name} 
+          onChange={e => setName(e.target.value)} 
+          placeholder="Your name" 
+          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+        />
+        
+        <div className="flex items-center gap-2">
+          <span className="text-sm">Rating:</span>
+          <select 
+            value={rating} 
+            onChange={e => setRating(Number(e.target.value))} 
+            className="p-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          >
+            {[5,4,3,2,1].map(num => (
+              <option key={num} value={num}>
+                {num} - {num === 5 ? 'Excellent' : num === 4 ? 'Good' : num === 3 ? 'Average' : num === 2 ? 'Poor' : 'Bad'}
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        <textarea 
+          value={text} 
+          onChange={e => setText(e.target.value)} 
+          placeholder="Your review experience..." 
+          rows="3"
+          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+        />
+        
+        <button 
+          type="submit" 
+          className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors"
+        >
+          Submit Review
+        </button>
+      </div>
+    </form>
+  );
+}
+
+
+
+
+
+
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
+function Navbar() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [screenSize, setScreenSize] = useState('desktop');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setScreenSize('mobile');
+      } else if (width >= 768 && width < 1024) {
+        setScreenSize('tablet');
+      } else {
+        setScreenSize('desktop');
+      }
+    };
+
+    // Initial call
+    handleResize();
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // Close sidebar when clicking on a link
+  const handleSidebarLinkClick = () => {
+    setIsSidebarOpen(false);
+    setIsMenuOpen(false);
+  };
+
+  // Close sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+      
+      if (isSidebarOpen && sidebar && !sidebar.contains(event.target) && 
+          sidebarToggle && !sidebarToggle.contains(event.target) &&
+          mobileMenuToggle && !mobileMenuToggle.contains(event.target)) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isSidebarOpen]);
+
+  // Navigation items
+  const navItems = [
+    { path: '/', label: 'Home', icon: '🏠' },
+    { path: '/about', label: 'About', icon: '👥' },
+    { path: '/services', label: 'Services', icon: '⚡' },
+    { path: '/portfolio', label: 'Portfolio', icon: '💼' },
+    { path: '/contact', label: 'Contact', icon: '📞' }
+  ];
+
+  const authItems = [
+    { path: '/authform', label: 'Login/SignUp', icon: '🔐', gradient: 'from-teal-500 to-teal-600' },
+    { path: '/profile', label: 'Profile', icon: '👤', gradient: 'from-green-500 to-green-600' }
+  ];
+
+  return (
+    <div>
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${
+        isScrolled ? 'bg-slate-900/95 backdrop-blur-lg shadow-xl py-2' : 'bg-transparent py-4'
+      }`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center">
+            {/* Logo and Sidebar Toggle - Visible on all screens */}
+            <div className="flex items-center">
+              <button
+                id="sidebar-toggle"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                className="mr-4 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-purple-800/50 transition-all duration-200"
+                aria-label="Toggle sidebar"
+              >
+                <div className="w-6 h-6 relative">
+                  <span className="absolute left-0 top-1 w-6 h-0.5 bg-current"></span>
+                  <span className="absolute left-0 top-3 w-6 h-0.5 bg-current"></span>
+                  <span className="absolute left-0 top-5 w-6 h-0.5 bg-current"></span>
+                </div>
+              </button>
+              
+              <div className="flex-shrink-0">
+                <Link 
+                  to="/" 
+                  className="text-2xl font-bold text-white hover:scale-105 transition-transform duration-200"
+                >
+                  <span className="bg-gradient-to-r from-teal-400 to-purple-400 bg-clip-text text-transparent">
+                    MDK Agency
+                  </span>
+                </Link>
+              </div>
+            </div>
+            
+            {/* Desktop Navigation - Visible on lg screens and above */}
+            <div className="hidden lg:block">
+              <div className="ml-10 flex items-center space-x-1">
+                {navItems.map((item) => (
+                  <Link 
+                    key={item.path}
+                    to={item.path}
+                    className="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-purple-800/50 transition-all duration-200 hover:scale-105"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <div className="flex space-x-2 ml-4">
+                  {authItems.map((item) => (
+                    <Link 
+                      key={item.path}
+                      to={item.path}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r ${item.gradient} text-white hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-teal-500/25`}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            {/* Tablet Navigation - Visible on md screens (768px - 1023px) */}
+            <div className="hidden md:flex lg:hidden items-center space-x-2">
+              {authItems.map((item) => (
+                <Link 
+                  key={item.path}
+                  to={item.path}
+                  className={`px-3 py-2 rounded-lg text-xs font-medium bg-gradient-to-r ${item.gradient} text-white hover:scale-105 transition-all duration-200`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+            
+            {/* Mobile menu button - Visible on small screens */}
+            <div className="md:hidden flex items-center">
+              <button
+                id="mobile-menu-toggle"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="inline-flex items-center justify-center p-2 rounded-lg text-gray-400 hover:text-white hover:bg-purple-800/50 focus:outline-none transition-all duration-200"
+                aria-expanded="false"
+              >
+                <span className="sr-only">Open main menu</span>
+                <div className="w-6 h-6 relative">
+                  <span className={`absolute left-0 top-1 w-6 h-0.5 bg-current transition-all duration-300 ${
+                    isMenuOpen ? 'rotate-45 top-3' : ''
+                  }`}></span>
+                  <span className={`absolute left-0 top-3 w-6 h-0.5 bg-current transition-all duration-300 ${
+                    isMenuOpen ? 'opacity-0' : ''
+                  }`}></span>
+                  <span className={`absolute left-0 top-5 w-6 h-0.5 bg-current transition-all duration-300 ${
+                    isMenuOpen ? '-rotate-45 top-3' : ''
+                  }`}></span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Enhanced Mobile Navigation - Only for small screens */}
+        <div className={`md:hidden transition-all duration-300 overflow-hidden ${
+          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        }`}>
+          <div className="px-4 pt-2 pb-4 space-y-1 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800">
+            {[...navItems, ...authItems].map((item) => (
+              <Link 
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsMenuOpen(false)}
+                className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
+                  authItems.some(authItem => authItem.path === item.path) 
+                    ? `bg-gradient-to-r ${item.gradient} text-white` 
+                    : 'text-gray-300 hover:text-white hover:bg-purple-800/50'
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </nav>
+
+      {/* Sidebar Overlay - Visible on all screens when sidebar is open */}
+      <div 
+        className={`fixed inset-0 bg-black z-40 transition-opacity duration-300 ${
+          isSidebarOpen ? 'opacity-50' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setIsSidebarOpen(false)}
+      ></div>
+
+      {/* Enhanced Sidebar - Accessible on all screen sizes */}
+      <div 
+        id="sidebar"
+        className={`fixed left-0 top-0 h-full w-80 bg-slate-900/95 backdrop-blur-lg shadow-2xl z-50 transform transition-transform duration-300 ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {/* Sidebar Header */}
+        <div className="p-6 border-b border-slate-800">
+          <div className="flex items-center justify-between">
+            <Link 
+              to="/" 
+              className="text-2xl font-bold text-white"
+              onClick={handleSidebarLinkClick}
+            >
+              <span className="bg-gradient-to-r from-teal-400 to-purple-400 bg-clip-text text-transparent">
+                MDK Agency
+              </span>
+            </Link>
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-purple-800/50 transition-all duration-200"
+              aria-label="Close sidebar"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          
+          {/* Screen size indicator (for demo purposes) */}
+          <div className="mt-2 text-xs text-gray-400">
+            Current view: {screenSize} screen
+          </div>
+        </div>
+
+        {/* Sidebar Navigation */}
+        <div className="p-4 space-y-2">
+          {navItems.map((item) => (
+            <Link 
+              key={item.path}
+              to={item.path}
+              onClick={handleSidebarLinkClick}
+              className="flex items-center px-4 py-3 rounded-lg text-gray-300 hover:text-white hover:bg-purple-800/50 transition-all duration-200 group"
+            >
+              <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                {item.icon}
+              </span>
+              <span className="font-medium">{item.label}</span>
+            </Link>
+          ))}
+        </div>
+
+        {/* Sidebar Auth Section */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-800">
+          <div className="space-y-2">
+            {authItems.map((item) => (
+              <Link 
+                key={item.path}
+                to={item.path}
+                onClick={handleSidebarLinkClick}
+                className={`flex items-center justify-center px-4 py-3 rounded-lg bg-gradient-to-r ${item.gradient} text-white font-medium hover:scale-105 transition-all duration-200`}
+              >
+                <span className="mr-2">{item.icon}</span>
+                {item.label}
+              </Link>
+            ))}
+          </div>
+          
+          {/* Additional info for different screen sizes */}
+          <div className="mt-4 text-center">
+            <div className="text-xs text-gray-400">
+              Sidebar accessible on all screen sizes
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              {screenSize === 'mobile' && '📱 Mobile view'}
+              {screenSize === 'tablet' && '📟 Tablet view'}
+              {screenSize === 'desktop' && '💻 Desktop view'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Navbar;
+
+
+
+
+import React, { useState, useMemo, useEffect } from "react";
+import Navbar from "./Navbar";
+import { useNavigate } from 'react-router-dom';
+
+// Large static data moved out of the component so it's not recreated on every render
+const serviceCategories = {
+  design: [
+    { id: 1, title: "Logo Design", price: 30, img: "https://source.unsplash.com/featured/?logo,design", rating: 4.8, reviews: 88, desc: "Professional logo design with multiple concepts" },
+    { id: 2, title: "Business Card Design", price: 25, img: "https://source.unsplash.com/featured/?business,card", rating: 4.7, reviews: 45, desc: "Elegant business card designs" },
+    { id: 3, title: "Brochure Design", price: 50, img: "https://source.unsplash.com/featured/?brochure,design", rating: 4.6, reviews: 32, desc: "Professional brochure layouts" },
+    { id: 4, title: "Poster Design", price: 35, img: "https://source.unsplash.com/featured/?poster,design", rating: 4.5, reviews: 67, desc: "Eye-catching poster designs" },
+    { id: 5, title: "Flyer Design", price: 20, img: "https://source.unsplash.com/featured/?flyer,design", rating: 4.4, reviews: 89, desc: "Marketing flyer designs" },
+    { id: 6, title: "Book Cover Design", price: 60, img: "https://source.unsplash.com/featured/?book,cover", rating: 4.9, reviews: 23, desc: "Captivating book cover designs" },
+    { id: 7, title: "Packaging Design", price: 75, img: "https://source.unsplash.com/featured/?packaging,design", rating: 4.7, reviews: 41, desc: "Product packaging solutions" },
+    { id: 8, title: "T-Shirt Design", price: 25, img: "https://source.unsplash.com/featured/?tshirt,design", rating: 4.6, reviews: 56, desc: "Custom t-shirt graphics" },
+    { id: 9, title: "Social Media Kit", price: 45, img: "https://source.unsplash.com/featured/?social,media", rating: 4.8, reviews: 78, desc: "Complete social media graphics" },
+    { id: 10, title: "Infographic Design", price: 55, img: "https://source.unsplash.com/featured/?infographic,design", rating: 4.5, reviews: 34, desc: "Data visualization graphics" }
+  ],
+  digital: [
+  ],
+  digital: [
+    { id: 11, title: "Website Design", price: 400, img: "https://source.unsplash.com/featured/?website,design", rating: 4.9, reviews: 14, desc: "Responsive website design" },
+    { id: 12, title: "WordPress Development", price: 300, img: "https://source.unsplash.com/featured/?wordpress,development", rating: 4.8, reviews: 56, desc: "Custom WordPress sites" },
+    { id: 13, title: "E-commerce Store", price: 600, img: "https://source.unsplash.com/featured/?ecommerce,store", rating: 4.7, reviews: 42, desc: "Online store development" },
+    { id: 14, title: "Mobile App Design", price: 500, img: "https://source.unsplash.com/featured/?mobile,app", rating: 4.6, reviews: 38, desc: "UI/UX app design" },
+    { id: 15, title: "Landing Page", price: 150, img: "https://source.unsplash.com/featured/?landing,page", rating: 4.5, reviews: 67, desc: "High-converting landing pages" },
+    { id: 16, title: "Email Template", price: 40, img: "https://source.unsplash.com/featured/?email,template", rating: 4.4, reviews: 29, desc: "Responsive email templates" },
+    { id: 17, title: "Web App Development", price: 800, img: "https://source.unsplash.com/featured/?web,app", rating: 4.9, reviews: 19, desc: "Custom web applications" },
+    { id: 18, title: "API Integration", price: 200, img: "https://source.unsplash.com/featured/?api,integration", rating: 4.7, reviews: 31, desc: "Third-party API integration" },
+    { id: 19, title: "Database Design", price: 180, img: "https://source.unsplash.com/featured/?database,design", rating: 4.6, reviews: 22, desc: "Database architecture" },
+    { id: 20, title: "Cloud Setup", price: 120, img: "https://source.unsplash.com/featured/?cloud,setup", rating: 4.5, reviews: 45, desc: "Cloud infrastructure setup" }
+  ],
+  marketing: [
+    { id: 21, title: "SEO Optimization", price: 120, img: "https://source.unsplash.com/featured/?seo,optimization", rating: 4.5, reviews: 18, desc: "Search engine optimization" },
+    { id: 22, title: "Social Media Marketing", price: 80, img: "https://source.unsplash.com/featured/?social,media,marketing", rating: 4.6, reviews: 73, desc: "Social media campaign management" },
+    { id: 23, title: "Content Writing", price: 25, img: "https://source.unsplash.com/featured/?content,writing", rating: 4.7, reviews: 89, desc: "Professional content creation" },
+    { id: 24, title: "Google Ads Management", price: 100, img: "https://source.unsplash.com/featured/?google,ads", rating: 4.4, reviews: 52, desc: "PPC campaign management" },
+    { id: 25, title: "Email Marketing", price: 60, img: "https://source.unsplash.com/featured/?email,marketing", rating: 4.5, reviews: 41, desc: "Email campaign setup" },
+    { id: 26, title: "Marketing Strategy", price: 150, img: "https://source.unsplash.com/featured/?marketing,strategy", rating: 4.8, reviews: 27, desc: "Comprehensive marketing plan" },
+    { id: 27, title: "Influencer Marketing", price: 200, img: "https://source.unsplash.com/featured/?influencer,marketing", rating: 4.3, reviews: 34, desc: "Influencer collaboration" },
+    { id: 28, title: "Video Marketing", price: 90, img: "https://source.unsplash.com/featured/?video,marketing", rating: 4.6, reviews: 28, desc: "Promotional video creation" },
+    { id: 29, title: "Brand Strategy", price: 180, img: "https://source.unsplash.com/featured/?brand,strategy", rating: 4.7, reviews: 19, desc: "Brand development plan" },
+    { id: 30, title: "Market Research", price: 70, img: "https://source.unsplash.com/featured/?market,research", rating: 4.5, reviews: 36, desc: "Industry analysis" }
+  ],
+  video: [
+    { id: 31, title: "Video Editing", price: 60, img: "https://source.unsplash.com/featured/?video,editing", rating: 4.8, reviews: 41, desc: "Professional video editing" },
+    { id: 32, title: "Motion Graphics", price: 85, img: "https://source.unsplash.com/featured/?motion,graphics", rating: 4.7, reviews: 33, desc: "Animated graphics creation" },
+    { id: 33, title: "YouTube Intro", price: 40, img: "https://source.unsplash.com/featured/?youtube,intro", rating: 4.6, reviews: 67, desc: "Custom YouTube introductions" },
+    { id: 34, title: "Explainer Video", price: 120, img: "https://source.unsplash.com/featured/?explainer,video", rating: 4.5, reviews: 42, desc: "Animated explainer videos" },
+    { id: 35, title: "Video Ads", price: 75, img: "https://source.unsplash.com/featured/?video,ads", rating: 4.4, reviews: 38, desc: "Commercial video advertisements" },
+    { id: 36, title: "Video Restoration", price: 50, img: "https://source.unsplash.com/featured/?video,restoration", rating: 4.9, reviews: 24, desc: "Old video enhancement" },
+    { id: 37, title: "Color Grading", price: 45, img: "https://source.unsplash.com/featured/?color,grading", rating: 4.7, reviews: 29, desc: "Professional color correction" },
+    { id: 38, title: "Audio Enhancement", price: 30, img: "https://source.unsplash.com/featured/?audio,enhancement", rating: 4.6, reviews: 51, desc: "Sound quality improvement" },
+    { id: 39, title: "Subtitles/Captions", price: 20, img: "https://source.unsplash.com/featured/?subtitles,captions", rating: 4.5, reviews: 73, desc: "Video captioning services" },
+    { id: 40, title: "Video Compression", price: 15, img: "https://source.unsplash.com/featured/?video,compression", rating: 4.4, reviews: 46, desc: "File size optimization" }
+  ],
+  writing: [
+    { id: 41, title: "Blog Writing", price: 20, img: "https://www.google.com/imgres?q=blog%20writing&imgurl=https%3A%2F%2Fddiy.co%2Fwp-content%2Fuploads%2Fblog-writing-company-comparison.jpg&imgrefurl=https%3A%2F%2Fddiy.co%2Fblog-writing-services%2F&docid=1ml2l6T_bU5oTM&tbnid=EyQyqNp14yMZ2M&vet=12ahUKEwjdv8HfjYqQAxUQvicCHRRHGI44ChAzegQIPRAA..i&w=2400&h=1200&hcb=2&ved=2ahUKEwjdv8HfjYqQAxUQvicCHRRHGI44ChAzegQIPRAA", rating: 4.7, reviews: 94, desc: "Engaging blog content" },
+    { id: 42, title: "Article Writing", price: 25, img: "https://source.unsplash.com/featured/?article,writing", rating: 4.6, reviews: 78, desc: "Well-researched articles" },
+    { id: 43, title: "Copywriting", price: 35, img: "https://source.unsplash.com/featured/?copywriting", rating: 4.8, reviews: 63, desc: "Persuasive sales copy" },
+    { id: 44, title: "Technical Writing", price: 45, img: "https://source.unsplash.com/featured/?technical,writing", rating: 4.5, reviews: 42, desc: "Technical documentation" },
+    { id: 45, title: "Script Writing", price: 50, img: "https://source.unsplash.com/featured/?script,writing", rating: 4.4, reviews: 37, desc: "Video and audio scripts" },
+    { id: 46, title: "Proofreading", price: 15, img: "https://source.unsplash.com/featured/?proofreading", rating: 4.9, reviews: 89, desc: "Error correction service" },
+    { id: 47, title: "Translation", price: 30, img: "https://source.unsplash.com/featured/?translation", rating: 4.7, reviews: 56, desc: "Multi-language translation" },
+    { id: 48, title: "Resume Writing", price: 40, img: "https://source.unsplash.com/featured/?resume,writing", rating: 4.6, reviews: 71, desc: "Professional resume creation" },
+    { id: 49, title: "Ebook Writing", price: 200, img: "https://source.unsplash.com/featured/?ebook,writing", rating: 4.5, reviews: 28, desc: "Complete ebook development" },
+    { id: 50, title: "Product Descriptions", price: 18, img: "https://source.unsplash.com/featured/?product,descriptions", rating: 4.4, reviews: 65, desc: "Compelling product text" }
+  ],
+  business: [
+    { id: 51, title: "Business Plan", price: 150, img: "https://source.unsplash.com/featured/?business,plan", rating: 4.8, reviews: 34, desc: "Comprehensive business planning" },
+    { id: 52, title: "Financial Analysis", price: 120, img: "https://source.unsplash.com/featured/?financial,analysis", rating: 4.7, reviews: 27, desc: "Financial performance review" },
+    { id: 53, title: "Market Analysis", price: 100, img: "https://source.unsplash.com/featured/?market,analysis", rating: 4.6, reviews: 41, desc: "Industry market research" },
+    { id: 54, title: "Legal Consultation", price: 80, img: "https://source.unsplash.com/featured/?legal,consultation", rating: 4.5, reviews: 23, desc: "Business legal advice" },
+    { id: 55, title: "Tax Preparation", price: 60, img: "https://source.unsplash.com/featured/?tax,preparation", rating: 4.4, reviews: 58, desc: "Tax filing service" },
+    { id: 56, title: "Virtual Assistant", price: 25, img: "https://source.unsplash.com/featured/?virtual,assistant", rating: 4.3, reviews: 72, desc: "Administrative support" },
+    { id: 57, title: "Data Entry", price: 15, img: "https://source.unsplash.com/featured/?data,entry", rating: 4.2, reviews: 89, desc: "Accurate data processing" },
+    { id: 58, title: "CRM Setup", price: 90, img: "https://source.unsplash.com/featured/?crm,setup", rating: 4.7, reviews: 31, desc: "Customer relationship management" },
+    { id: 59, title: "Project Management", price: 70, img: "https://source.unsplash.com/featured/?project,management", rating: 4.6, reviews: 44, desc: "Project coordination" },
+    { id: 60, title: "Business Consulting", price: 110, img: "https://source.unsplash.com/featured/?business,consulting", rating: 4.5, reviews: 39, desc: "Strategic business advice" }
+  ],
+  ai: [
+    { id: 61, title: "AI Image Generation", price: 10, img: "https://source.unsplash.com/featured/?ai,image", rating: 4.4, reviews: 9, desc: "Custom AI-generated images" },
+    { id: 62, title: "AI Video Creation", price: 100, img: "https://source.unsplash.com/featured/?ai,video", rating: 4.3, reviews: 12, desc: "AI-powered video production" },
+    { id: 63, title: "Chatbot Development", price: 200, img: "https://source.unsplash.com/featured/?chatbot,development", rating: 4.6, reviews: 25, desc: "AI chatbot implementation" },
+    { id: 64, title: "Machine Learning", price: 300, img: "https://source.unsplash.com/featured/?machine,learning", rating: 4.7, reviews: 18, desc: "ML model development" },
+    { id: 65, title: "Data Analysis", price: 80, img: "https://source.unsplash.com/featured/?data,analysis", rating: 4.5, reviews: 33, desc: "AI-powered data insights" },
+    { id: 66, title: "AI Content Writing", price: 25, img: "https://source.unsplash.com/featured/?ai,writing", rating: 4.4, reviews: 47, desc: "AI-assisted content creation" },
+    { id: 67, title: "Voice Synthesis", price: 45, img: "https://source.unsplash.com/featured/?voice,synthesis", rating: 4.3, reviews: 21, desc: "AI voice generation" },
+    { id: 68, title: "Predictive Analytics", price: 120, img: "https://source.unsplash.com/featured/?predictive,analytics", rating: 4.8, reviews: 14, desc: "Future trend forecasting" },
+    { id: 69, title: "AI Optimization", price: 90, img: "https://source.unsplash.com/featured/?ai,optimization", rating: 4.6, reviews: 29, desc: "Process automation" },
+    { id: 70, title: "Neural Networks", price: 250, img: "https://source.unsplash.com/featured/?neural,networks", rating: 4.9, reviews: 11, desc: "Advanced AI solutions" }
+  ],
+  music: [
+    { id: 71, title: "Music Production", price: 150, img: "https://source.unsplash.com/featured/?music,production", rating: 4.7, reviews: 36, desc: "Professional music creation" },
+    { id: 72, title: "Audio Mixing", price: 60, img: "https://source.unsplash.com/featured/?audio,mixing", rating: 4.6, reviews: 42, desc: "Sound mixing and mastering" },
+    { id: 73, title: "Jingle Creation", price: 80, img: "https://source.unsplash.com/featured/?jingle,creation", rating: 4.5, reviews: 28, desc: "Custom advertising jingles" },
+    { id: 74, title: "Sound Design", price: 70, img: "https://source.unsplash.com/featured/?sound,design", rating: 4.4, reviews: 33, desc: "Custom sound effects" },
+    { id: 75, title: "Voice Over", price: 40, img: "https://source.unsplash.com/featured/?voice,over", rating: 4.8, reviews: 57, desc: "Professional voice recording" },
+    { id: 76, title: "Podcast Editing", price: 55, img: "https://source.unsplash.com/featured/?podcast,editing", rating: 4.7, reviews: 39, desc: "Podcast production" },
+    { id: 77, title: "Audio Restoration", price: 35, img: "https://source.unsplash.com/featured/?audio,restoration", rating: 4.6, reviews: 24, desc: "Audio quality enhancement" },
+    { id: 78, title: "Music Licensing", price: 100, img: "https://source.unsplash.com/featured/?music,licensing", rating: 4.5, reviews: 19, desc: "Royalty-free music" },
+    { id: 79, title: "Audio Book Production", price: 120, img: "https://source.unsplash.com/featured/?audiobook,production", rating: 4.4, reviews: 26, desc: "Complete audiobook creation" },
+    { id: 80, title: "Beat Making", price: 50, img: "https://source.unsplash.com/featured/?beat,making", rating: 4.3, reviews: 48, desc: "Custom music beats" }
+  ],
+  photography: [
+    { id: 81, title: "Product Photography", price: 45, img: "https://source.unsplash.com/featured/?product,photography", rating: 4.8, reviews: 63, desc: "Professional product shots" },
+    { id: 82, title: "Photo Editing", price: 20, img: "https://source.unsplash.com/featured/?photo,editing", rating: 4.7, reviews: 78, desc: "Image enhancement" },
+    { id: 83, title: "Portrait Photography", price: 60, img: "https://source.unsplash.com/featured/?portrait,photography", rating: 4.6, reviews: 42, desc: "Professional portraits" },
+    { id: 84, title: "Real Estate Photos", price: 75, img: "https://source.unsplash.com/featured/?real,estate,photos", rating: 4.5, reviews: 37, desc: "Property photography" },
+    { id: 85, title: "Food Photography", price: 55, img: "https://source.unsplash.com/featured/?food,photography", rating: 4.4, reviews: 51, desc: "Culinary photography" },
+    { id: 86, title: "Photo Restoration", price: 30, img: "https://source.unsplash.com/featured/?photo,restoration", rating: 4.9, reviews: 29, desc: "Old photo repair" },
+    { id: 87, title: "Drone Photography", price: 90, img: "https://source.unsplash.com/featured/?drone,photography", rating: 4.7, reviews: 34, desc: "Aerial photography" },
+    { id: 88, title: "Event Photography", price: 100, img: "https://source.unsplash.com/featured/?event,photography", rating: 4.6, reviews: 45, desc: "Event coverage" },
+    { id: 89, title: "Fashion Photography", price: 80, img: "https://source.unsplash.com/featured/?fashion,photography", rating: 4.5, reviews: 38, desc: "Fashion shoot" },
+    { id: 90, title: "360° Photography", price: 120, img: "https://source.unsplash.com/featured/?360,photography", rating: 4.4, reviews: 22, desc: "Immersive photography" }
+  ],
+  consulting: [
+    { id: 91, title: "Career Coaching", price: 65, img: "https://source.unsplash.com/featured/?career,coaching", rating: 4.8, reviews: 41, desc: "Professional career guidance" },
+    { id: 92, title: "Life Coaching", price: 55, img: "https://source.unsplash.com/featured/?life,coaching", rating: 4.7, reviews: 36, desc: "Personal development" },
+    { id: 93, title: "Health Coaching", price: 70, img: "https://source.unsplash.com/featured/?health,coaching", rating: 4.6, reviews: 29, desc: "Wellness guidance" },
+    { id: 94, title: "Financial Advice", price: 85, img: "https://source.unsplash.com/featured/?financial,advice", rating: 4.5, reviews: 33, desc: "Financial planning" },
+    { id: 95, title: "Relationship Coaching", price: 60, img: "https://source.unsplash.com/featured/?relationship,coaching", rating: 4.4, reviews: 27, desc: "Relationship guidance" },
+    { id: 96, title: "Business Coaching", price: 95, img: "https://source.unsplash.com/featured/?business,coaching", rating: 4.3, reviews: 31, desc: "Business mentorship" },
+    { id: 97, title: "Nutrition Planning", price: 45, img: "https://source.unsplash.com/featured/?nutrition,planning", rating: 4.7, reviews: 44, desc: "Dietary guidance" },
+    { id: 98, title: "Fitness Training", price: 50, img: "https://source.unsplash.com/featured/?fitness,training", rating: 4.6, reviews: 52, desc: "Exercise programs" },
+    { id: 99, title: "Meditation Guidance", price: 35, img: "https://source.unsplash.com/featured/?meditation,guidance", rating: 4.5, reviews: 38, desc: "Mindfulness training" },
+    { id: 100, title: "Time Management", price: 40, img: "https://source.unsplash.com/featured/?time,management", rating: 4.4, reviews: 46, desc: "Productivity coaching" }
+  ],
+  education: [
+    { id: 101, title: "Tutoring", price: 30, img: "https://source.unsplash.com/featured/?tutoring", rating: 4.8, reviews: 67, desc: "Academic tutoring" },
+    { id: 102, title: "Online Course", price: 150, img: "https://source.unsplash.com/featured/?online,course", rating: 4.7, reviews: 42, desc: "Course development" },
+    { id: 103, title: "Language Lessons", price: 25, img: "https://source.unsplash.com/featured/?language,lessons", rating: 4.6, reviews: 58, desc: "Language instruction" },
+    { id: 104, title: "Test Preparation", price: 45, img: "https://source.unsplash.com/featured/?test,preparation", rating: 4.5, reviews: 39, desc: "Exam preparation" },
+    { id: 105, title: "Homework Help", price: 20, img: "https://source.unsplash.com/featured/?homework,help", rating: 4.4, reviews: 73, desc: "Academic assistance" },
+    { id: 106, title: "Research Assistance", price: 35, img: "https://source.unsplash.com/featured/?research,assistance", rating: 4.3, reviews: 28, desc: "Research support" },
+    { id: 107, title: "Study Materials", price: 15, img: "https://source.unsplash.com/featured/?study,materials", rating: 4.7, reviews: 51, desc: "Educational resources" },
+    { id: 108, title: "Workshop Development", price: 80, img: "https://source.unsplash.com/featured/?workshop,development", rating: 4.6, reviews: 34, desc: "Training workshops" },
+    { id: 109, title: "Curriculum Design", price: 120, img: "https://source.unsplash.com/featured/?curriculum,design", rating: 4.5, reviews: 26, desc: "Educational planning" },
+    { id: 110, title: "Skill Assessment", price: 40, img: "https://source.unsplash.com/featured/?skill,assessment", rating: 4.4, reviews: 32, desc: "Competency evaluation" }
+  ]
+};
+
+// Flatten all services for search
+const allServices = Object.values(serviceCategories).flat();
+
+// Enhanced payment methods
+const paymentMethods = [
+  { id: "card", name: "Credit/Debit Card", icon: "💳" },
+  { id: "paypal", name: "PayPal", icon: "🔵" },
+  { id: "bank", name: "Bank Transfer", icon: "🏦" },
+  { id: "crypto", name: "Cryptocurrency", icon: "₿" },
+  { id: "applepay", name: "Apple Pay", icon: "🍎" },
+  { id: "googlepay", name: "Google Pay", icon: "📱" },
+  { id: "alipay", name: "Alipay", icon: "💰" },
+  { id: "wechatpay", name: "WeChat Pay", icon: "💬" }
+];
+
+// 100+ currency options
+const currencies = [
+  { code: "USD", symbol: "$", name: "US Dollar", rate: 1 },
+  { code: "EUR", symbol: "€", name: "Euro", rate: 0.85 },
+  { code: "GBP", symbol: "£", name: "British Pound", rate: 0.73 },
+  { code: "JPY", symbol: "¥", name: "Japanese Yen", rate: 110 },
+  { code: "CAD", symbol: "C$", name: "Canadian Dollar", rate: 1.25 },
+  { code: "AUD", symbol: "A$", name: "Australian Dollar", rate: 1.35 },
+  { code: "CHF", symbol: "CHF", name: "Swiss Franc", rate: 0.92 },
+  { code: "CNY", symbol: "¥", name: "Chinese Yuan", rate: 6.45 },
+  { code: "INR", symbol: "₹", name: "Indian Rupee", rate: 74 },
+  { code: "RUB", symbol: "₽", name: "Russian Ruble", rate: 73 },
+  // Add more currencies as needed...
+];
+
+// Country options
+const countries = [
+  { code: "US", name: "United States", flag: "🇺🇸" },
+  { code: "GB", name: "United Kingdom", flag: "🇬🇧" },
+  { code: "CA", name: "Canada", flag: "🇨🇦" },
+  { code: "AU", name: "Australia", flag: "🇦🇺" },
+  { code: "DE", name: "Germany", flag: "🇩🇪" },
+  { code: "FR", name: "France", flag: "🇫🇷" },
+  { code: "JP", name: "Japan", flag: "🇯🇵" },
+  { code: "CN", name: "China", flag: "🇨🇳" },
+  { code: "IN", name: "India", flag: "🇮🇳" },
+  { code: "BR", name: "Brazil", flag: "🇧🇷" },
+  // Add more countries as needed...
+];
+
+// Image component with fallback and lazy loading
+function ImageWithFallback({ src, alt, className = '', ...rest }) {
+  const [currentSrc, setCurrentSrc] = useState(src);
+  useEffect(() => setCurrentSrc(src), [src]);
+  return (
+    <img
+      src={currentSrc}
+      alt={alt}
+      className={className}
+      loading="lazy"
+      onError={() => setCurrentSrc('/logo.PNG')}
+      {...rest}
+    />
+  );
+}
+
+export default function Services() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [services] = useState(allServices);
+  const [query, setQuery] = useState("");
+  const [minRating, setMinRating] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(1000);
+  const [cart, setCart] = useState([]);
+  const [selectedService, setSelectedService] = useState(null);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [selectedCurrency, setSelectedCurrency] = useState("USD");
+  const [selectedCountry, setSelectedCountry] = useState("US");
+  const [reviews, setReviews] = useState({});
+  const [sortBy, setSortBy] = useState("popular");
+  const [toasts, setToasts] = useState([]);
+
+  function handleSearchChange(e) {
+    setQuery(e.target.value);
+  }
+
+  const filteredServices = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    let filtered = services.filter(s => {
+      const matchesQuery = q === "" || 
+        s.title.toLowerCase().includes(q) || 
+        s.desc.toLowerCase().includes(q) ||
+        Object.keys(serviceCategories).some(cat => 
+          cat.includes(q) && serviceCategories[cat].includes(s)
+        );
+      const matchesRating = s.rating >= minRating;
+      const matchesPrice = s.price <= maxPrice;
+      const matchesCategory = selectedCategory === "all" || 
+        Object.keys(serviceCategories).some(cat => 
+          cat === selectedCategory && serviceCategories[cat].includes(s)
+        );
+      return matchesQuery && matchesRating && matchesPrice && matchesCategory;
+    });
+
+    switch (sortBy) {
+      case "price-low":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "price-high":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case "rating":
+        filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      case "popular":
+        filtered.sort((a, b) => b.reviews - a.reviews);
+        break;
+      default:
+        break;
+    }
+
+    return filtered;
+  }, [services, query, minRating, maxPrice, selectedCategory, sortBy]);
+
+  function convertPrice(price, fromCurrency = "USD", toCurrency) {
+    const fromRate = currencies.find(c => c.code === fromCurrency)?.rate || 1;
+    const toRate = currencies.find(c => c.code === toCurrency)?.rate || 1;
+    return (price * toRate / fromRate).toFixed(2);
+  }
+
+  function getCurrencySymbol() {
+    return currencies.find(c => c.code === selectedCurrency)?.symbol || "$";
+  }
+
+  function addToCart(service) {
+    setCart(prev => [...prev, service]);
+    pushToast(`${service.title} added to order`, "success");
+  }
+
+  function removeFromCart(index) {
+    setCart(prev => prev.filter((_, i) => i !== index));
+  }
+
+  function placeOrder() {
+    if (cart.length === 0) {
+      pushToast("Please add at least one service to place an order.", "warning");
+      return;
+    }
+    setShowCheckout(true);
+    }
+  const navigate = useNavigate();
+
+  // Confirm payment: create order on backend and redirect user to billing/payment page.
+  async function confirmPayment() {
+    if (cart.length === 0) {
+      pushToast('Your cart is empty.', 'warning');
+      return;
+    }
+
+    // Prepare line items for backend
+    const lineItems = cart.map(item => ({ sku: item.id || item.title, title: item.title, price: item.price, qty: 1 }));
+
+    try {
+      pushToast('Creating order and redirecting to payment...', 'info', 3000);
+      const API_BASE = window._API_BASE || '';
+      const DEFAULT_API_BASE = import.meta?.env?.VITE_API_BASE || 'http://localhost:4000';
+      const BASE = API_BASE || DEFAULT_API_BASE;
+      const res = await fetch(`${BASE}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guestToken: null, lineItems, currency: selectedCurrency, metadata: { paymentMethod } })
+      });
+      const text = await res.text();
+      let json;
+      try { json = JSON.parse(text); } catch (e) { json = null; }
+      if (!res.ok || !json || !json.ok) {
+        console.error('Order creation failed:', res.status, text);
+        pushToast((json && (json.error || json.message)) || `Failed to create order (${res.status})`, 'warning', 6000);
+        return;
+      }
+
+      const redirectUrl = json.redirectUrl || `/billing/${json.orderId}`;
+      // keep cart until payment completes; navigate to billing page where payment must be selected
+      setShowCheckout(false);
+      navigate(redirectUrl);
+    } catch (err) {
+      console.error('Error creating order:', err);
+      // Surface the underlying error message to the user for easier debugging in dev
+      const msg = err && err.message ? `Error creating order: ${err.message}` : 'Error creating order. Please try again.';
+      pushToast(msg, 'warning', 6000);
+    }
+  }
+
+  function openServiceDetail(service) {
+    setSelectedService(service);
+  }
+
+  function leaveReview(serviceId, name, rating, text) {
+    setReviews(prev => {
+      const list = prev[serviceId] ? [...prev[serviceId]] : [];
+      list.unshift({ name, rating, text, date: new Date().toISOString() });
+      return { ...prev, [serviceId]: list };
+    });
+  }
+
+  function renderStars(rating) {
+    if (!rating || rating <= 0) return <span className="text-sm text-slate-400">No ratings</span>;
+    const full = Math.floor(rating);
+    const half = rating - full >= 0.5;
+    const stars = [];
+    for (let i = 0; i < full; i++) stars.push('★');
+    if (half) stars.push('☆');
+    while (stars.length < 5) stars.push('☆');
+    return <span className="text-yellow-500">{stars.join('')}</span>;
+  }
+
+  // pushToast implementation (used for non-blocking notifications)
+  function pushToast(message, type = "info", ttl = 3000) {
+    const id = Date.now() + Math.random();
+    setToasts(t => [...t, { id, message, type }]);
+    setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), ttl);
+  }
+
+  return (
+    <>
+      <Navbar />
+
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 text-slate-900 pt-20 p-6">
+       
+        <header className="max-w-7xl mx-auto mb-8">
+          
+          <div className="text-center mb-8">
+        
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              Professional Services Marketplace
+            </h1>
+            <p className="mt-3 text-lg text-slate-600">Discover 100+ professional services with secure payments and global support</p>
+          </div>
+
+          {/* Enhanced Search and Filters */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg mb-6">
+            <div className="grid md:grid-cols-4 gap-4 mb-4">
+              <div className="relative">
+                <input
+                  value={query}
+                  onChange={handleSearchChange}
+                  placeholder="Search services, keywords, categories..."
+                  className="w-full p-3 pr-10 rounded-lg border border-gray-200 shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1">
+                  🔍
+                </button>
+              </div>
+
+              <select 
+                value={selectedCategory} 
+                onChange={e => setSelectedCategory(e.target.value)}
+                className="p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500"
+              >
+                <option value="all">All Categories</option>
+                {Object.keys(serviceCategories).map(cat => (
+                  <option key={cat} value={cat}>
+                    {cat.charAt(0).toUpperCase() + cat.slice(1)} ({serviceCategories[cat].length})
+                  </option>
+                ))}
+              </select>
+
+              <select 
+                value={sortBy} 
+                onChange={e => setSortBy(e.target.value)}
+                className="p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500"
+              >
+                <option value="popular">Most Popular</option>
+                <option value="rating">Highest Rated</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+              </select>
+
+              <div className="flex gap-2">
+                <select 
+                  value={selectedCurrency}
+                  onChange={e => setSelectedCurrency(e.target.value)}
+                  className="flex-1 p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500"
+                >
+                  {currencies.map(currency => (
+                    <option key={currency.code} value={currency.code}>
+                      {currency.code} ({currency.symbol})
+                    </option>
+                  ))}
+                </select>
+
+                <select 
+                  value={selectedCountry}
+                  onChange={e => setSelectedCountry(e.target.value)}
+                  className="flex-1 p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500"
+                >
+                  {countries.map(country => (
+                    <option key={country.code} value={country.code}>
+                      {country.flag} {country.code}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Minimum Rating: {minRating}+</label>
+                <input 
+                  type="range" 
+                  min="0" 
+                  max="5" 
+                  step="0.5"
+                  value={minRating} 
+                  onChange={e => setMinRating(parseFloat(e.target.value))}
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Max Price: {getCurrencySymbol()}{convertPrice(maxPrice, "USD", selectedCurrency)}</label>
+                <input 
+                  type="range" 
+                  min="0" 
+                  max="1000" 
+                  step="10"
+                  value={maxPrice} 
+                  onChange={e => setMaxPrice(parseInt(e.target.value))}
+                  className="w-full"
+                />
+              </div>
+
+              <div className="flex items-center justify-end">
+                <span className="text-sm text-gray-600">
+                  Showing {filteredServices.length} of {services.length} services
+                </span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main className="max-w-7xl mx-auto grid lg:grid-cols-4 gap-8">
+          {/* Services Grid */}
+          <section className="lg:col-span-3">
+            {/* Category Tabs */}
+            <div className="flex overflow-x-auto gap-2 mb-6 pb-2">
+              {["all", ...Object.keys(serviceCategories)].map(category => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-full whitespace-nowrap transition-all ${
+                    selectedCategory === category
+                      ? "bg-purple-600 text-white shadow-lg"
+                      : "bg-white text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  {category === "all" ? "All Services" : category.charAt(0).toUpperCase() + category.slice(1)}
+                  {category !== "all" && ` (${serviceCategories[category].length})`}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              {filteredServices.map(service => (
+                <article key={service.id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-4 hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                  <div className="relative">
+                    <ImageWithFallback
+                      src={service.img}
+                      alt={service.title}
+                      className="h-48 w-full object-cover rounded-xl mb-4"
+                    />
+                    <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-sm">
+                      {getCurrencySymbol()}{convertPrice(service.price, "USD", selectedCurrency)}
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-lg font-semibold text-gray-900">{service.title}</h3>
+                    <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">
+                      {Object.keys(serviceCategories).find(cat => 
+                        serviceCategories[cat].includes(service)
+                      )}
+                    </span>
+                  </div>
+                  
+                  <p className="text-sm text-gray-600 mb-3">{service.desc}</p>
+                  
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-1">
+                      {renderStars(service.rating)}
+                      <span className="text-sm text-gray-500 ml-1">({service.reviews})</span>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => openServiceDetail(service)}
+                        className="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                      >
+                        Details
+                      </button>
+                      <button 
+                        onClick={() => addToCart(service)}
+                        className="px-3 py-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
+                      >
+                        Order
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          {/* Enhanced Sidebar */}
+          <aside className="lg:col-span-1 space-y-6 sticky top-6 h-fit">
+            {/* Shopping Cart */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                🛒 Your Order
+                {cart.length > 0 && (
+                  <span className="bg-red-500 text-white text-sm px-2 py-1 rounded-full">
+                    {cart.length}
+                  </span>
+                )}
+              </h3>
+              
+              <div className="space-y-3 max-h-64 overflow-auto">
+                {cart.length === 0 ? (
+                  <div className="text-center text-gray-500 py-4">
+                    Your cart is empty
+                  </div>
+                ) : (
+                  cart.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                      <div className="flex-1">
+                        <div className="font-medium text-sm">{item.title}</div>
+                        <div className="text-xs text-gray-500">
+                          {getCurrencySymbol()}{convertPrice(item.price, "USD", selectedCurrency)}
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => removeFromCart(index)}
+                        className="text-red-500 hover:text-red-700 transition-colors"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {cart.length > 0 && (
+                <div className="border-t pt-4 mt-4">
+                  <div className="flex justify-between text-lg font-semibold mb-4">
+                    <span>Total:</span>
+                    <span>
+                      {getCurrencySymbol()}
+                      {convertPrice(
+                        cart.reduce((sum, item) => sum + item.price, 0),
+                        "USD",
+                        selectedCurrency
+                      )}
+                    </span>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Payment Method</label>
+                      <select 
+                        value={paymentMethod}
+                        onChange={e => setPaymentMethod(e.target.value)}
+                        className="w-full p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-purple-500"
+                      >
+                        {paymentMethods.map(method => (
+                          <option key={method.id} value={method.id}>
+                            {method.icon} {method.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <button 
+                      onClick={placeOrder}
+                      className="w-full bg-gradient-to-r from-green-500 to-teal-600 text-white py-3 rounded-lg hover:from-green-600 hover:to-teal-700 transition-all font-semibold"
+                    >
+                      💳 Place Order
+                    </button>
+                    
+                    <button 
+                      onClick={() => setCart([])}
+                      className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      Clear Cart
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Payment Methods */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+              <h4 className="font-semibold mb-3">💳 Accepted Payments</h4>
+              <div className="grid grid-cols-4 gap-3">
+                {paymentMethods.map(method => (
+                  <div key={method.id} className="text-center p-2 bg-gray-50 rounded-lg">
+                    <div className="text-2xl mb-1">{method.icon}</div>
+                    <div className="text-xs text-gray-600">{method.name}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl p-6 shadow-lg">
+              <h4 className="font-semibold mb-3">📊 Marketplace Stats</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Total Services:</span>
+                  <span className="font-semibold">110+</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Categories:</span>
+                  <span className="font-semibold">10</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Countries:</span>
+                  <span className="font-semibold">50+</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Currencies:</span>
+                  <span className="font-semibold">100+</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </main>
+
+        {/* Enhanced Checkout Modal */}
+        {showCheckout && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+              <h3 className="text-xl font-semibold mb-4">Secure Checkout</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2">Order Summary</h4>
+                  <div className="space-y-2 max-h-40 overflow-auto">
+                    {cart.map((item, index) => (
+                      <div key={index} className="flex justify-between text-sm">
+                        <span>{item.title}</span>
+                        <span>{getCurrencySymbol()}{convertPrice(item.price, "USD", selectedCurrency)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border-t pt-4">
+                  <div className="flex justify-between font-semibold">
+                    <span>Total:</span>
+                    <span>
+                      {getCurrencySymbol()}
+                      {convertPrice(
+                        cart.reduce((sum, item) => sum + item.price, 0),
+                        "USD",
+                        selectedCurrency
+                      )}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Payment Method</label>
+                    <select 
+                      value={paymentMethod}
+                      onChange={e => setPaymentMethod(e.target.value)}
+                      className="w-full p-2 border rounded-lg"
+                    >
+                      {paymentMethods.map(method => (
+                        <option key={method.id} value={method.id}>
+                          {method.icon} {method.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => setShowCheckout(false)}
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={confirmPayment}
+                      className="flex-1 px-4 py-2 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg hover:from-green-600 hover:to-teal-700 transition-all font-semibold"
+                    >
+                      Confirm Payment
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Service Detail Modal */}
+        {selectedService && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-auto">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-2xl font-semibold">{selectedService.title}</h2>
+                <button 
+                  onClick={() => setSelectedService(null)}
+                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <ImageWithFallback
+                  src={selectedService.img}
+                  alt={selectedService.title}
+                  className="w-full h-64 object-cover rounded-xl"
+                />
+                
+                <div>
+                  <p className="text-gray-600 mb-4">{selectedService.desc}</p>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between">
+                      <span className="font-medium">Price:</span>
+                      <span className="text-lg font-semibold">
+                        {getCurrencySymbol()}
+                        {convertPrice(selectedService.price, "USD", selectedCurrency)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Rating:</span>
+                      <span className="flex items-center gap-1">
+                        {renderStars(selectedService.rating)} ({selectedService.reviews} reviews)
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Category:</span>
+                      <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm">
+                        {Object.keys(serviceCategories).find(cat => 
+                          serviceCategories[cat].includes(selectedService)
+                        )}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={() => {
+                      addToCart(selectedService);
+                      setSelectedService(null);
+                    }}
+                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all font-semibold mb-4"
+                  >
+                    Add to Cart - {getCurrencySymbol()}
+                    {convertPrice(selectedService.price, "USD", selectedCurrency)}
+                  </button>
+                </div>
+              </div>
+
+              {/* Reviews Section */}
+              <div className="mt-6">
+                <h4 className="font-semibold mb-4">Customer Reviews</h4>
+                <ReviewForm 
+                  onSubmit={(name, rating, text) => {
+                    leaveReview(selectedService.id, name, rating, text);
+                  }} 
+                />
+                
+                <div className="mt-4 space-y-3">
+                  {(reviews[selectedService.id] || []).map((review, index) => (
+                    <div key={index} className="p-4 bg-gray-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="font-medium">{review.name}</span>
+                        <span className="text-yellow-500">{'★'.repeat(review.rating)}</span>
+                      </div>
+                      <p className="text-gray-700">{review.text}</p>
+                      <div className="text-xs text-gray-500 mt-2">
+                        {new Date(review.date).toLocaleDateString()}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <footer className="max-w-7xl mx-auto mt-12 text-center text-sm text-gray-600">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+            <p>© {new Date().getFullYear()} MDK Agency — Professional Services Marketplace</p>
+            <div className="flex justify-center gap-6 mt-2">
+              <a href="#" className="hover:text-purple-600 transition-colors">Terms</a>
+              <a href="#" className="hover:text-purple-600 transition-colors">Privacy</a>
+              <a href="#" className="hover:text-purple-600 transition-colors">Contact</a>
+              <a href="#" className="hover:text-purple-600 transition-colors">Support</a>
+            </div>
+          </div>
+        </footer>
+        {/* Toast container */}
+        <div aria-live="polite" className="fixed bottom-6 right-6 z-50 space-y-2">
+          {toasts.map(t => (
+            <div key={t.id} className={`px-4 py-2 rounded-lg shadow-lg text-sm ${t.type === 'success' ? 'bg-green-500 text-white' : t.type === 'warning' ? 'bg-yellow-400 text-black' : 'bg-gray-800 text-white'}`}>
+              {t.message}
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ReviewForm Component
+function ReviewForm({ onSubmit }) {
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(5);
+  const [text, setText] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!name || !text) {
+      alert('Please add your name and review text');
+      return;
+    }
+    onSubmit(name, rating, text);
+    setName(''); setRating(5); setText('');
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-gray-50 p-4 rounded-lg">
+      <h5 className="font-medium mb-3">Write a Review</h5>
+      <div className="space-y-3">
+        <input 
+          value={name} 
+          onChange={e => setName(e.target.value)} 
+          placeholder="Your name" 
+          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+        />
+        
+        <div className="flex items-center gap-2">
+          <span className="text-sm">Rating:</span>
+          <select 
+            value={rating} 
+            onChange={e => setRating(Number(e.target.value))} 
+            className="p-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          >
+            {[5,4,3,2,1].map(num => (
+              <option key={num} value={num}>
+                {num} - {num === 5 ? 'Excellent' : num === 4 ? 'Good' : num === 3 ? 'Average' : num === 2 ? 'Poor' : 'Bad'}
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        <textarea 
+          value={text} 
+          onChange={e => setText(e.target.value)} 
+          placeholder="Your review experience..." 
+          rows="3"
+          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+        />
+        
+        <button 
+          type="submit" 
+          className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors"
+        >
+          Submit Review
+        </button>
+      </div>
+    </form>
+  );
+}
+

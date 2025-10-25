@@ -1,0 +1,278 @@
+{
+  "tech_stack": [
+    "JavaScript",
+    "React",
+    "Node.js",
+    "Express",
+    "MongoDB",
+    "Mongoose",
+    "Stripe",
+    "Nodemailer",
+    "CORS",
+    "JWT"
+  ],
+  "features": [
+    {
+      "name": "User Authentication",
+      "description": "Complete user authentication system with registration, login, email verification, and password reset",
+      "files": [
+        "backend/routes/auth.js",
+        "backend/models/User.js",
+        "backend/models/VerificationToken.js",
+        "src/pages/AuthForm.jsx"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Authentication API",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/api/auth/register": {
+            "post": {
+              "summary": "Register new user",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {"type": "string"},
+                        "email": {"type": "string"},
+                        "password": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {"description": "User registered successfully"},
+                "400": {"description": "User already exists or validation error"},
+                "500": {"description": "Internal server error"}
+              }
+            }
+          },
+          "/api/auth/login": {
+            "post": {
+              "summary": "User login",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "email": {"type": "string"},
+                        "password": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {"description": "Login successful"},
+                "401": {"description": "Invalid credentials"},
+                "500": {"description": "Internal server error"}
+              }
+            }
+          },
+          "/api/auth/verify-email": {
+            "post": {
+              "summary": "Verify email with code",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "email": {"type": "string"},
+                        "code": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "/api/auth/forgot-password": {
+            "post": {
+              "summary": "Request password reset",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "email": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Payment Processing",
+      "description": "Stripe-integrated payment processing with order management",
+      "files": [
+        "backend/routes/payments.js",
+        "backend/routes/orders.js",
+        "backend/models/Order.js",
+        "src/pages/Billing.jsx"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Payment API",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/api/payments/methods": {
+            "get": {
+              "summary": "Get available payment methods",
+              "responses": {
+                "200": {"description": "Available payment methods"}
+              }
+            }
+          },
+          "/api/payments/sessions": {
+            "post": {
+              "summary": "Create payment session",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {"type": "string"},
+                        "methodId": {"type": "string"},
+                        "returnUrl": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "/api/payments/confirm": {
+            "post": {
+              "summary": "Confirm payment",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {"type": "string"},
+                        "paymentSessionId": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Order Management",
+      "description": "Order creation, tracking, and management system",
+      "files": [
+        "backend/routes/orders.js",
+        "backend/models/Order.js"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Order API",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/api/orders": {
+            "post": {
+              "summary": "Create new order",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "userId": {"type": "string"},
+                        "guestToken": {"type": "string"},
+                        "lineItems": {"type": "array"},
+                        "currency": {"type": "string"},
+                        "metadata": {"type": "object"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Service Management",
+      "description": "Service listings and management",
+      "files": [
+        "backend/routes/services.js",
+        "backend/models/Service.js",
+        "src/pages/Serv.jsx"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Service API",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/api/services": {
+            "get": {
+              "summary": "Get all services",
+              "responses": {
+                "200": {"description": "List of services"}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "User Account Management",
+      "description": "User profile and account management",
+      "files": [
+        "backend/routes/account.js",
+        "src/pages/AccountSetting.jsx",
+        "src/pages/Dashboard.jsx"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Account API",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/api/account/me": {
+            "get": {
+              "summary": "Get user profile"
+            },
+            "put": {
+              "summary": "Update user profile"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
